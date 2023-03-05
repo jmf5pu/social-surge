@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <meta
+      http-equiv="X-Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <title>my electron app title</title>
+  </head>
+  <body>
+    <h3 id="main-response"></h3>
+    <form id="#myForm">
+      <label for="fname">First name:</label><br>
+      <input type="text" id="fname" name="fname"><br>
+      <label for="lname">Last name:</label><br>
+      <input type="text" id="lname" name="lname">
+      <input type="submit" value="Submit" id="form-submit-button">
+    </form>
+    <!-- <h3 id = "click-counter"></h3>
+    <button class = "btn btn-success" id = "countbtn">Click here</button>-->
+    <script src="js/renderer.js" defer></script>
+  </body>
+</html>
+<script src="js/renderer.js" defer></script>
