@@ -53,19 +53,11 @@ app.on('window-all-closed', () => {
       app.quit()
     }
 })
-  
-  
-//   ipcMain.on('synchronous-message', (event, data) => {
-//     console.log(data);
-//     // send message to renderer.js
-//     event.sender.send('synchronous-reply', 'hello');
-//     console.log("response sent!")
-//   });
 
 ipcMain.on('asynchronous-message', (event, arg) => {
     console.log(arg) // prints "ping" in the Node console
     // works like `send`, but returning a message back
     // to the renderer that sent the original message
     //event.sender.send('synchronous-reply','hello')
-    event.reply('asynchronous-reply', 'pong')
+    event.reply('asynchronous-reply', arg)
 })
