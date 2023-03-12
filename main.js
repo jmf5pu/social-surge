@@ -3,18 +3,20 @@ const path = require('path');
 const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
 
+let mainWindow;
+
+
 // Create main window
 function createMainWindow() {
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         title: 'learning electron',
         width: isDev ? 1000 : 500, // extend window\ for dev console
         height: 600,
         webPreferences: {
             // nodeIntegration: true,
-            // contextIsolation: false,
-            // enableRemoteModule: true,
-            nodeIntegration: true,
             contextIsolation: true,
+            // enableRemoteModule: true,
+            nodeIntegration: false,
             preload: path.join(__dirname, 'preload.js'), // run preload script
         },
     });
