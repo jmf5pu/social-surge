@@ -16,7 +16,7 @@ submitFormButton.addEventListener('click', (event) => {
     submitForm([firstName, lastName]) // TODO: figure out why this is firing twice
 });
 
-window.ipcRenderer.once('asynchronous-reply', (event, arg) => {
+window.ipcRenderer.on('asynchronous-reply', (event, arg) => {
     console.log("receiving") // prints "pong" in the DevTools console
     mainResponse.innerHTML = arg;
 })
