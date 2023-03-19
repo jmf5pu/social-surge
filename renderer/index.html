@@ -5,25 +5,34 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
+      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';"
     />
-    <meta
-      http-equiv="X-Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'"
-    />
-    <script src="js/renderer.js" defer></script>
+    <style>
+      #page-one {visibility: visible;}
+      #page-two {visibility: hidden;}
+      #page-three {visibility: hidden;}
+    </style>
     <title>my electron app title</title>
   </head>
   <body>
-    <h3 id="main-response"></h3>
-    <form id="#myForm">
-      <label for="fname">First name:</label><br>
-      <input type="text" id="fname" name="fname"><br>
-      <label for="lname">Last name:</label><br>
-      <input type="text" id="lname" name="lname">
-      <input type="button" value="Submit" id="form-submit-button">
-    </form>
-    <!-- <h3 id = "click-counter"></h3>
-    <button class = "btn btn-success" id = "countbtn">Click here</button>-->
+    <div id="page-one">
+      <h3 id="main-response"></h3>
+      <form id="myForm">
+        <label for="fname">First name:</label><br>
+        <input type="text" id="fname" name="fname"><br>
+        <label for="lname">Last name:</label><br>
+        <input type="text" id="lname" name="lname">
+        <input type="button" value="Submit" id="form-submit-button">
+      </form>
+    </div>
+    <div id="page-two">
+      <h3>Page 2</h3>
+      <input type="button" value="Next" id="page-two-to-three">
+    </div>
+    <div id="page-three">
+      <h3>Page 3</h3>
+      <input type="button" value="Next" id="page-three-to-one">
+    </div>
+    <script src="js/renderer.js" defer></script>
   </body>
 </html>
