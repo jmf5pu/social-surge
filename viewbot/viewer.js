@@ -65,7 +65,7 @@ async function viewVideo(
         // click first result
         await click_and_wait(
             page, 
-            "#contents > ytd-video-renderer:nth-child(1)", 
+            "#title-wrapper",
             2000,
         );
         
@@ -76,8 +76,9 @@ async function viewVideo(
         await browser.close();
         return true;
     }
-    catch {
+    catch(err){
         await browser.close();
+        console.log(err.message)
         return false;
     }
 }
