@@ -15,10 +15,12 @@ function submitForm(formData){
 submitFormButton.addEventListener('click', (event) => {
     event.stopPropagation();
 
-    let firstName = document.getElementById("fname").value;
-    let lastName = document.getElementById("lname").value;
+    let searchString = document.getElementById("search-string").value;
+    let minViewS = document.getElementById("min-view-s").value;
+    let maxViewS = document.getElementById("max-view-s").value;
+
     // send data to main.js 
-    submitForm([firstName, lastName]);
+    submitForm([searchString, minViewS, maxViewS]);
     pageOne.style.visibility = "hidden";
     pageTwo.style.visibility = "visible";
 });
@@ -33,7 +35,6 @@ pageThreeNextButton.addEventListener('click', (event) => {
     pageOne.style.visibility = "visible";
 });
 
-// window.ipcRenderer.on('asynchronous-reply', (event, arg) => {
-//     console.log("receiving") 
-//     mainResponse.innerHTML = arg;
-// })
+window.ipcRenderer.on('asynchronous-reply', (event, arg) => {
+    console.log(arg)
+})

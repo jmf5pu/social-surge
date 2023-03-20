@@ -62,9 +62,9 @@ app.on('window-all-closed', () => {
 ipcMain.on('asynchronous-message', async (event, arg) => {
     console.log(arg)
     result = await viewVideo(
-        searchString = arg[0] + arg[1],
-        minViewS = 0,
-        maxViewS = 0,
+        searchString = arg[0],
+        minViewS = arg[1],
+        maxViewS = arg[2],
         proxy = "",
         chromiumPath = "C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe",
     )
