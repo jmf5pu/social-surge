@@ -2,8 +2,11 @@ const { app, BrowserWindow, Menu, ipcMain } = require('electron');
 const path = require('path');
 const isDev = process.env.NODE_ENV !== 'production';
 const isMac = process.platform === 'darwin';
-
 let mainWindow;
+
+var viewVideo = require('./viewbot/viewer.js');
+
+
 
 
 // Create main window
@@ -56,10 +59,15 @@ app.on('window-all-closed', () => {
     }
 })
 
-ipcMain.on('asynchronous-message', (event, arg) => {
-    console.log(arg) // prints "ping" in the Node console
-    // works like `send`, but returning a message back
-    // to the renderer that sent the original message
+ipcMain.on('asynchronous-message', async (event, arg) => {
+    console.log(arg)
+    result = await viewVideo(
+        searchString = arg[0] + arg[1],
+        minViewS = 0,
+        maxViewS = 0,
+        proxy = "",
+        chromiumPath = "C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe",
+    )
     //event.sender.send('synchronous-reply','hello')
-    event.reply('asynchronous-reply', arg)
+    event.reply('asynchronous-reply', result)
 })
