@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer-extra')
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
+const { expose } = require('threads/worker')
 
 async function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms))
@@ -91,4 +92,5 @@ async function viewVideo(
     }
 }
 
-module.exports = viewVideo
+// this lets workers in main.js access it
+expose(viewVideo)

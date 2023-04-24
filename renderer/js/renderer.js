@@ -39,6 +39,6 @@ pageThreeNextButton.addEventListener('click', (event) => {
     pageOne.style.visibility = 'visible'
 })
 
-window.ipcRenderer.on('asynchronous-reply', (event, arg) => {
-    console.log(arg)
+window.ipcRenderer.on('asynchronous-reply', (event, args) => {
+    console.log(args)
 })

@@ -1,15 +1,14 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
+const { spawn, Pool, Worker } = require('threads')
 const path = require('path')
 const isDev = process.env.NODE_ENV !== 'production'
 const isMac = process.platform === 'darwin'
 let mainWindow
 
-var viewVideo = require('./viewbot/viewer.js')
-
 // Create main window
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        title: 'learning electron',
+        title: 'pro viewer',
         width: isDev ? 1000 : 500, // extend window\ for dev console
         height: 600,
         webPreferences: {
@@ -55,16 +54,36 @@ app.on('window-all-closed', () => {
     }
 })
 
-ipcMain.on('asynchronous-message', async (event, arg) => {
-    console.log(arg)
-    result = await viewVideo(
-        (searchString = arg[0]),
-        (minViewS = arg[1]),
-        (maxViewS = arg[2]),
-        (proxy = ''),
-        (chromiumPath =
-            'C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe')
+/**
+ * args: [searchString, viewCount, minViewS, maxViewS, workerCount]
+ */
+ipcMain.on('asynchronous-message', async (event, args) => {
+    console.log(args)
+    viewCount = args[1]
+    workerCount = args[4]
+    const pool = Pool(
+        () => spawn(new Worker('./viewbot/viewer')),
+        workerCount
     )
-    // TODO: implement thread pool here
+
+    for (i = 0; i < viewCount; i++) {
+        pool.queue(async (viewVideo) => {
+            await viewVideo(
+                (searchString = args[0]),
+                (minViewS = args[2]),
+                (maxViewS = args[3]),
+                (proxy = ''), // TODO: fill in proxy here
+                (chromiumPath =
+                    'C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe') // TODO: figure out what to do with this param
+            )
+        })
+        // TODO: handle results
+    }
+
+    // clean up thread pool
+    await pool.completed()
+    await pool.terminate()
+
+    result = 'worked' // remove later
     event.reply('asynchronous-reply', result)
 })
