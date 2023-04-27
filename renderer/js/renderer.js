@@ -39,6 +39,13 @@ pageThreeNextButton.addEventListener('click', (event) => {
     pageOne.style.visibility = 'visible'
 })
 
+// exit app
+document.getElementById('exit-btn').addEventListener('click', (event) => {
+    event.preventDefault()
+    window.ipcRenderer.send('exit')
+})
+
+// listen for main process responses
 window.ipcRenderer.on('asynchronous-reply', (event, args) => {
     console.log(args)
 })

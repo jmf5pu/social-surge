@@ -48,6 +48,12 @@ app.whenReady().then(() => {
     })
 })
 
+// activates on exit button press
+ipcMain.on('exit', () => {
+    app.quit()
+})
+
+// quit if all windows are closed
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
         app.quit()
