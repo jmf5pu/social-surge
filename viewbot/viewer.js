@@ -57,10 +57,7 @@ async function viewVideo(
 
     try {
         // get view duration in ms
-        var viewTimeMs = getRandomNumber(
-            minViewS * 1000,
-            maxViewS * 1000
-        )
+        var viewTimeMs = getRandomNumber(minViewS * 1000, maxViewS * 1000)
 
         const page = (await browser.pages())[0]
         await page.goto(
@@ -93,5 +90,9 @@ async function viewVideo(
 
 // export
 module.exports = {
-    sleep, getRandomNumber, clickAndWait, clickAndWaitIfPresent, viewVideo
-};
+    sleep,
+    getRandomNumber,
+    clickAndWait,
+    clickAndWaitIfPresent,
+    viewVideo,
+}
