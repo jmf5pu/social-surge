@@ -1,12 +1,11 @@
 const puppeteer = require('puppeteer-extra')
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
-const { expose } = require('threads/worker')
 
 async function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-async function click_and_wait(
+async function clickAndWait(
     page,
     target_selector,
     wait_ms,
@@ -20,7 +19,7 @@ async function click_and_wait(
     await sleep(wait_ms)
 }
 
-async function click_and_wait_if_present(
+async function clickAndWaitIfPresent(
     page,
     target_selector,
     wait_ms,
@@ -30,11 +29,11 @@ async function click_and_wait_if_present(
     clicks the selector if present, will NOT fail loudly if not present
     */
     try {
-        await click_and_wait(page, target_selector, wait_ms, click_count)
+        await clickAndWait(page, target_selector, wait_ms, click_count)
     } catch {}
 }
 
-function _get_random_number(min, max) {
+function getRandomNumber(min, max) {
     /*
 generates a random number between the specified max and min (inclusive))
 */
@@ -58,7 +57,7 @@ async function viewVideo(
 
     try {
         // get view duration in ms
-        var viewTimeMs = _get_random_number(
+        var viewTimeMs = getRandomNumber(
             minViewS * 1000,
             maxViewS * 1000
         )
@@ -70,14 +69,14 @@ async function viewVideo(
         await sleep(6000)
 
         // click accept on cookies popup if present
-        await click_and_wait_if_present(
+        await clickAndWaitIfPresent(
             page,
             '[aria-label="Accept the use of cookies and other data for the purposes described"]',
             5000
         )
 
         // click first result
-        await click_and_wait(page, '#title-wrapper', 2000)
+        await clickAndWait(page, '#title-wrapper', 2000)
 
         // view video
         await sleep(viewTimeMs)
@@ -92,5 +91,7 @@ async function viewVideo(
     }
 }
 
-// this lets workers in main.js access it
-expose(viewVideo)
+// export
+module.exports = {
+    sleep, getRandomNumber, clickAndWait, clickAndWaitIfPresent, viewVideo
+};
