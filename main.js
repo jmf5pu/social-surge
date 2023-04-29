@@ -68,7 +68,7 @@ ipcMain.on('asynchronous-message', async (event, args) => {
     viewCount = args[1]
     workerCount = args[4]
     const pool = Pool(
-        () => spawn(new Worker('./viewbot/export')),
+        () => spawn(new Worker('./viewbot/export-viewer')),
         workerCount
     )
     for (i = 0; i < viewCount; i++) {

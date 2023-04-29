@@ -5,31 +5,27 @@ async function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
-async function clickAndWait(
-    page,
-    target_selector,
-    wait_ms,
-    click_count = 1
-) {
+async function clickAndWait(page, targetSelector, waitMs, clickCount = 1) {
     /*
     clicks a selector on the screen and and then waits
-    if_present: check if selector is present before clicking
+    TODO:
+    something funny going on here, get not implemented error if I swap instructions order below
     */
-    await page.click(target_selector, { clickCount: click_count })
-    await sleep(wait_ms)
+    await page.click(targetSelector, { clickCount: clickCount })
+    await sleep(waitMs)
 }
 
 async function clickAndWaitIfPresent(
     page,
-    target_selector,
-    wait_ms,
-    click_count = 1
+    targetSelector,
+    waitMs,
+    clickCount = 1
 ) {
     /*
     clicks the selector if present, will NOT fail loudly if not present
     */
     try {
-        await clickAndWait(page, target_selector, wait_ms, click_count)
+        await clickAndWait(page, targetSelector, waitMs, clickCount)
     } catch {}
 }
 
