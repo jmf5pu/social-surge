@@ -71,10 +71,9 @@ ipcMain.on('asynchronous-message', async (event, args) => {
         () => spawn(new Worker('./viewbot/export')),
         workerCount
     )
-
     for (i = 0; i < viewCount; i++) {
         pool.queue(async (viewVideo) => {
-            await viewVideo(
+            viewResult = await viewVideo(
                 (searchString = args[0]),
                 (minViewS = args[2]),
                 (maxViewS = args[3]),
@@ -82,6 +81,8 @@ ipcMain.on('asynchronous-message', async (event, args) => {
                 (chromiumPath =
                     'C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe') // TODO: figure out what to do with this param
             )
+            // send real-time results back to renderer
+            event.reply('asynchronous-reply', viewResult)
         })
         // TODO: handle results
     }
@@ -89,7 +90,4 @@ ipcMain.on('asynchronous-message', async (event, args) => {
     // clean up thread pool
     await pool.completed()
     await pool.terminate()
-
-    result = 'worked' // remove later
-    event.reply('asynchronous-reply', result)
 })

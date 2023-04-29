@@ -7,6 +7,11 @@ var pageOne = document.getElementById('page-one')
 var pageTwo = document.getElementById('page-two')
 var pageThree = document.getElementById('page-three')
 
+// view counts
+var succeededCount = 0
+var failedCount = 0
+var todoCount = 0
+
 function submitForm(formData) {
     console.log('sending')
     window.ipcRenderer.send('asynchronous-message', formData)
@@ -22,6 +27,13 @@ submitFormButton.addEventListener('click', (event) => {
     let workerCount = parseInt(
         document.getElementById('worker-count').value
     )
+
+    todoCount = viewCount
+    succeededCount = 0
+    failedCount = 0
+    document.getElementById('to-do-count').innerHTML = todoCount
+    document.getElementById('succeeded-count').innerHTML = succeededCount
+    document.getElementById('failed-count').innerHTML = failedCount
 
     // send data to main.js
     submitForm([searchString, viewCount, minViewS, maxViewS, workerCount])
@@ -48,4 +60,14 @@ document.getElementById('exit-btn').addEventListener('click', (event) => {
 // listen for main process responses
 window.ipcRenderer.on('asynchronous-reply', (event, args) => {
     console.log(args)
+    if (args) {
+        succeededCount += 1
+        document.getElementById('succeeded-count').innerHTML =
+            succeededCount
+    } else {
+        failed += 1
+        document.getElementById('failed-count').innerHTML = failedCount
+    }
+    todoCount -= 1
+    document.getElementById('to-do-count').innerHTML = todoCount
 })
