@@ -67,11 +67,7 @@
                 /><br />
                 <label for="min-view-s">View duration:</label>
                 <input type="text" id="min-view-s" name="min-view-s" /> -
-                <input
-                    type="text"
-                    id="max-view-s"
-                    name="max-view-s"
-                />s<br />
+                <input type="text" id="max-view-s" name="max-view-s" />s
                 <label for="worker-count">Workers:</label>
                 <input
                     type="text"
@@ -79,6 +75,17 @@
                     name="worker-count"
                     value="1"
                 /><br />
+                <label for="proxy-list"
+                    >Proxies (IP:PORT, comma or newline separated)</label
+                ><br />
+                <textarea
+                    id="proxy-list"
+                    name="w3review"
+                    rows="5"
+                    cols="20"
+                >
+                </textarea>
+                <br />
                 <input
                     type="button"
                     value="Submit"

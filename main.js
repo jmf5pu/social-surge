@@ -1,5 +1,6 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const { spawn, Pool, Worker } = require('threads')
+const { parseProxies } = require('./utils.js')
 const path = require('path')
 const isDev = process.env.NODE_ENV !== 'production'
 const isMac = process.platform === 'darwin'
@@ -8,13 +9,11 @@ let mainWindow
 // Create main window
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        title: 'pro viewer',
-        width: isDev ? 1000 : 500, // extend window\ for dev console
+        title: 'Pro Viewer',
+        width: isDev ? 1000 : 500, // extend window for dev console
         height: 600,
         webPreferences: {
-            // nodeIntegration: true,
             contextIsolation: true,
-            // enableRemoteModule: true,
             nodeIntegration: false,
             preload: path.join(__dirname, 'preload.js'), // run preload script
         },
@@ -61,30 +60,33 @@ app.on('window-all-closed', () => {
 })
 
 /**
- * args: [searchString, viewCount, minViewS, maxViewS, workerCount]
+ * args: RunInfo object
  */
-ipcMain.on('asynchronous-message', async (event, args) => {
-    console.log(args)
-    viewCount = args[1]
-    workerCount = args[4]
+ipcMain.on('asynchronous-message', async (event, runInfo) => {
+    console.log(runInfo.proxies)
+    runInfo.proxies = parseProxies(runInfo.proxies)
+
     const pool = Pool(
         () => spawn(new Worker('./viewbot/export-viewer')),
-        workerCount
+        runInfo.workerCount
     )
-    for (i = 0; i < viewCount; i++) {
+
+    for (i = 0; i < runInfo.viewCount; i++) {
+        // select proxy (repeat if viewCount is greater than 1:1)
+        proxy = runInfo.proxies[runInfo.viewCount % runInfo.proxies.length]
+
         pool.queue(async (viewVideo) => {
             viewResult = await viewVideo(
-                (searchString = args[0]),
-                (minViewS = args[2]),
-                (maxViewS = args[3]),
-                (proxy = ''), // TODO: fill in proxy here
+                (searchString = runInfo.searchString),
+                (minViewS = runInfo.minViewS),
+                (maxViewS = runInfo.maxViewS),
+                (proxy = proxy), // TODO: fill in proxy here
                 (chromiumPath =
                     'C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe') // TODO: figure out what to do with this param
             )
             // send real-time results back to renderer
             event.reply('asynchronous-reply', viewResult)
         })
-        // TODO: handle results
     }
 
     // clean up thread pool

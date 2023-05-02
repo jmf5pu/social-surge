@@ -20,15 +20,17 @@ function submitForm(formData) {
 submitFormButton.addEventListener('click', (event) => {
     event.stopPropagation()
 
-    let searchString = document.getElementById('search-string').value
-    let viewCount = parseInt(document.getElementById('view-count').value)
-    let minViewS = parseInt(document.getElementById('min-view-s').value)
-    let maxViewS = parseInt(document.getElementById('max-view-s').value)
-    let workerCount = parseInt(
-        document.getElementById('worker-count').value
+    let runArgs = new RunInfo(
+        searchString = document.getElementById('search-string').value,
+        viewCount = parseInt(document.getElementById('view-count').value),
+        minViewS = parseInt(document.getElementById('min-view-s').value),
+        maxViewS = parseInt(document.getElementById('max-view-s').value),
+        workerCount = parseInt(document.getElementById('worker-count').value),
+        proxies = document.getElementById('proxy-list').value
     )
 
-    todoCount = viewCount
+    // update fields on second screen
+    todoCount = runArgs.viewCount
     succeededCount = 0
     failedCount = 0
     document.getElementById('to-do-count').innerHTML = todoCount
@@ -36,7 +38,9 @@ submitFormButton.addEventListener('click', (event) => {
     document.getElementById('failed-count').innerHTML = failedCount
 
     // send data to main.js
-    submitForm([searchString, viewCount, minViewS, maxViewS, workerCount])
+    submitForm([runArgs])
+
+    // go to next page
     pageOne.style.visibility = 'hidden'
     pageTwo.style.visibility = 'visible'
 })
@@ -71,3 +75,29 @@ window.ipcRenderer.on('asynchronous-reply', (event, args) => {
     todoCount -= 1
     document.getElementById('to-do-count').innerHTML = todoCount
 })
+
+// fields are undefined TODO: figure out what is going on here
+class RunInfo {
+    constructor(
+        searchString,
+        viewCount,
+        minViewS,
+        maxViewS,
+        workerCount,
+        proxies
+    ) {
+        this.searchString = searchString
+        this.viewCount = viewCount
+        this.minViewS = minViewS
+        this.maxViewS = maxViewS
+        this.workerCount = workerCount
+        this.proxies = proxies
+    }
+    searchString = this.searchString
+    viewCount = this.viewCount
+    minViewS = this.minViewS
+    maxViewS = this.maxViewS
+    workerCount = this.workerCount
+    proxies = this.proxies
+    // TODO: validate fields here
+}
