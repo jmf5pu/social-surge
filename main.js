@@ -63,7 +63,6 @@ app.on('window-all-closed', () => {
  * args: RunInfo object
  */
 ipcMain.on('asynchronous-message', async (event, runInfo) => {
-    console.log(runInfo.proxies)
     runInfo.proxies = parseProxies(runInfo.proxies)
 
     const pool = Pool(
@@ -71,10 +70,13 @@ ipcMain.on('asynchronous-message', async (event, runInfo) => {
         runInfo.workerCount
     )
 
-    for (i = 0; i < runInfo.viewCount; i++) {
+    // keep looping until we have our desired # of successes
+    succeededCount = 0
+    while (succeededCount < runInfo.viewCount) {
+        // TODO: investigate infinite loop here
         // select proxy (repeat if viewCount is greater than 1:1)
         proxy = runInfo.proxies[runInfo.viewCount % runInfo.proxies.length]
-
+        console.log(`testing: ${proxy}`)
         pool.queue(async (viewVideo) => {
             viewResult = await viewVideo(
                 (searchString = runInfo.searchString),
@@ -84,8 +86,9 @@ ipcMain.on('asynchronous-message', async (event, runInfo) => {
                 (chromiumPath =
                     'C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe') // TODO: figure out what to do with this param
             )
-            // send real-time results back to renderer
+            // send real-time results back to renderer and increment counter
             event.reply('asynchronous-reply', viewResult)
+            succeededCount += viewResult
         })
     }
 

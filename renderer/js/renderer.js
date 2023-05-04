@@ -17,16 +17,21 @@ function submitForm(formData) {
     window.ipcRenderer.send('asynchronous-message', formData)
 }
 
+// page 1 -> 2
 submitFormButton.addEventListener('click', (event) => {
     event.stopPropagation()
 
     let runArgs = new RunInfo(
-        searchString = document.getElementById('search-string').value,
-        viewCount = parseInt(document.getElementById('view-count').value),
-        minViewS = parseInt(document.getElementById('min-view-s').value),
-        maxViewS = parseInt(document.getElementById('max-view-s').value),
-        workerCount = parseInt(document.getElementById('worker-count').value),
-        proxies = document.getElementById('proxy-list').value
+        (searchString = document.getElementById('search-string').value),
+        (viewCount = parseInt(
+            document.getElementById('view-count').value
+        )),
+        (minViewS = parseInt(document.getElementById('min-view-s').value)),
+        (maxViewS = parseInt(document.getElementById('max-view-s').value)),
+        (workerCount = parseInt(
+            document.getElementById('worker-count').value
+        )),
+        (proxies = document.getElementById('proxy-list').value)
     )
 
     // update fields on second screen
@@ -38,18 +43,20 @@ submitFormButton.addEventListener('click', (event) => {
     document.getElementById('failed-count').innerHTML = failedCount
 
     // send data to main.js
-    submitForm([runArgs])
+    submitForm(runArgs)
 
     // go to next page
     pageOne.style.visibility = 'hidden'
     pageTwo.style.visibility = 'visible'
 })
 
+// page 2 -> 3
 pageTwoNextButton.addEventListener('click', (event) => {
     pageTwo.style.visibility = 'hidden'
     pageThree.style.visibility = 'visible'
 })
 
+// page 3 -> 1
 pageThreeNextButton.addEventListener('click', (event) => {
     pageThree.style.visibility = 'hidden'
     pageOne.style.visibility = 'visible'
@@ -63,17 +70,16 @@ document.getElementById('exit-btn').addEventListener('click', (event) => {
 
 // listen for main process responses
 window.ipcRenderer.on('asynchronous-reply', (event, args) => {
-    console.log(args)
     if (args) {
         succeededCount += 1
         document.getElementById('succeeded-count').innerHTML =
             succeededCount
+        todoCount -= 1
+        document.getElementById('to-do-count').innerHTML = todoCount
     } else {
-        failed += 1
+        failedCount += 1
         document.getElementById('failed-count').innerHTML = failedCount
     }
-    todoCount -= 1
-    document.getElementById('to-do-count').innerHTML = todoCount
 })
 
 // fields are undefined TODO: figure out what is going on here
@@ -93,11 +99,5 @@ class RunInfo {
         this.workerCount = workerCount
         this.proxies = proxies
     }
-    searchString = this.searchString
-    viewCount = this.viewCount
-    minViewS = this.minViewS
-    maxViewS = this.maxViewS
-    workerCount = this.workerCount
-    proxies = this.proxies
     // TODO: validate fields here
 }
