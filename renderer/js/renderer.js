@@ -98,6 +98,7 @@ class RunInfo {
         this.maxViewS = maxViewS
         this.workerCount = workerCount
         this.proxies = proxies
+        this.currentAttempt = 0
     }
     // TODO: validate fields here
 }

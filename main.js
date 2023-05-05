@@ -70,25 +70,10 @@ ipcMain.on('asynchronous-message', async (event, runInfo) => {
         runInfo.workerCount
     )
 
-    // keep looping until we have our desired # of successes
-    succeededCount = 0
-    while (succeededCount < runInfo.viewCount) {
-        // TODO: investigate infinite loop here
-        // select proxy (repeat if viewCount is greater than 1:1)
-        proxy = runInfo.proxies[runInfo.viewCount % runInfo.proxies.length]
-        console.log(`testing: ${proxy}`)
+    // enqueue our desired number of views, failures will requeue themselves
+    for (i = 0; i < runInfo.viewCount; i++) {
         pool.queue(async (viewVideo) => {
-            viewResult = await viewVideo(
-                (searchString = runInfo.searchString),
-                (minViewS = runInfo.minViewS),
-                (maxViewS = runInfo.maxViewS),
-                (proxy = proxy), // TODO: fill in proxy here
-                (chromiumPath =
-                    'C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe') // TODO: figure out what to do with this param
-            )
-            // send real-time results back to renderer and increment counter
-            event.reply('asynchronous-reply', viewResult)
-            succeededCount += viewResult
+            await runViewVideo(event, pool, viewVideo, runInfo)
         })
     }
 
@@ -96,3 +81,30 @@ ipcMain.on('asynchronous-message', async (event, runInfo) => {
     await pool.completed()
     await pool.terminate()
 })
+
+// attempts to viewVideo once
+async function runViewVideo(event, pool, viewVideo, runInfo) {
+    // select proxy (repeat if viewCount is greater than 1:1)
+    let proxy =
+        runInfo.proxies[runInfo.currentAttempt % runInfo.proxies.length]
+    console.log(`trying proxy: ${proxy}`)
+    viewResult = await viewVideo(
+        (searchString = runInfo.searchString),
+        (minViewS = runInfo.minViewS),
+        (maxViewS = runInfo.maxViewS),
+        (proxy = proxy),
+        (chromiumPath =
+            'C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe') // TODO: figure out what to do with this param
+    )
+
+    // update object and send results to renderer process
+    runInfo.currentAttempt += 1
+    event.reply('asynchronous-reply', viewResult)
+
+    // recurse (requeue) if we failed
+    if (!viewResult) {
+        pool.queue(async (viewVideo) => {
+            await runViewVideo(event, pool, viewVideo, runInfo)
+        })
+    }
+}
