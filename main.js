@@ -59,9 +59,7 @@ app.on('window-all-closed', () => {
     }
 })
 
-/**
- * args: RunInfo object
- */
+// starts the run
 ipcMain.on('asynchronous-message', async (event, runInfo) => {
     runInfo.proxies = parseProxies(runInfo.proxies)
 
