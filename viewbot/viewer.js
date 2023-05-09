@@ -56,6 +56,17 @@ async function viewVideo(
         var viewTimeMs = getRandomNumber(minViewS * 1000, maxViewS * 1000)
 
         const page = (await browser.pages())[0]
+
+        // minimize browser
+        const session = await page.target().createCDPSession()
+        const { windowId } = await session.send(
+            'Browser.getWindowForTarget'
+        )
+        await session.send('Browser.setWindowBounds', {
+            windowId,
+            bounds: { windowState: 'minimized' },
+        })
+
         await page.goto(
             'https://www.youtube.com/results?search_query=' + searchString
         )

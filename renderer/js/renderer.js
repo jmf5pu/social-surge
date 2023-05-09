@@ -1,5 +1,6 @@
 var mainResponse = document.querySelector('#main-response')
 var submitFormButton = document.querySelector('#form-submit-button')
+var cancelButton = document.querySelector('#cancel-button')
 var pageTwoNextButton = document.querySelector('#page-two-to-three')
 var pageThreeNextButton = document.querySelector('#page-three-to-one')
 
@@ -14,10 +15,10 @@ var todoCount = 0
 
 function submitForm(formData) {
     console.log('sending')
-    window.ipcRenderer.send('asynchronous-message', formData)
+    window.ipcRenderer.send('run-start', formData)
 }
 
-// page 1 -> 2
+// page 1 -> 2 (kick off run)
 submitFormButton.addEventListener('click', (event) => {
     event.stopPropagation()
 
@@ -50,14 +51,18 @@ submitFormButton.addEventListener('click', (event) => {
     pageTwo.style.visibility = 'visible'
 })
 
-// page 2 -> 3
-pageTwoNextButton.addEventListener('click', (event) => {
-    pageTwo.style.visibility = 'hidden'
-    pageThree.style.visibility = 'visible'
+// page 2 -> 3 (cancel a run)
+cancelButton.addEventListener('click', () => {
+    window.ipcRenderer.send('run-cancel')
+    pageTwoToThree()
 })
+
+// go to page 3 when run is complete
+window.ipcRenderer.on('run-complete', pageTwoToThree)
 
 // page 3 -> 1
 pageThreeNextButton.addEventListener('click', (event) => {
+    console.log('run complete')
     pageThree.style.visibility = 'hidden'
     pageOne.style.visibility = 'visible'
 })
@@ -68,8 +73,8 @@ document.getElementById('exit-btn').addEventListener('click', (event) => {
     window.ipcRenderer.send('exit')
 })
 
-// listen for main process responses
-window.ipcRenderer.on('asynchronous-reply', (event, args) => {
+// update view stats real time
+window.ipcRenderer.on('individual-result', (event, args) => {
     if (args) {
         succeededCount += 1
         document.getElementById('succeeded-count').innerHTML =
@@ -82,7 +87,17 @@ window.ipcRenderer.on('asynchronous-reply', (event, args) => {
     }
 })
 
-// fields are undefined TODO: figure out what is going on here
+/**
+ *  |  Classes and helpers  |
+ *  v         below         v
+ */
+
+// go from page 2 to 3
+function pageTwoToThree() {
+    pageTwo.style.visibility = 'hidden'
+    pageThree.style.visibility = 'visible'
+}
+
 class RunInfo {
     constructor(
         searchString,
@@ -98,7 +113,7 @@ class RunInfo {
         this.maxViewS = maxViewS
         this.workerCount = workerCount
         this.proxies = proxies
-        this.currentAttempt = 0
+        this.proxyIndex = 0
     }
     // TODO: validate fields here
 }

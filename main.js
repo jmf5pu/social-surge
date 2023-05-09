@@ -4,6 +4,7 @@ const { parseProxies } = require('./utils.js')
 const path = require('path')
 const isDev = process.env.NODE_ENV !== 'production'
 const isMac = process.platform === 'darwin'
+var pool = Pool(() => {})
 let mainWindow
 
 // Create main window
@@ -60,16 +61,17 @@ app.on('window-all-closed', () => {
 })
 
 // starts the run
-ipcMain.on('asynchronous-message', async (event, runInfo) => {
+ipcMain.on('run-start', async (event, runInfo) => {
     runInfo.proxies = parseProxies(runInfo.proxies)
 
-    const pool = Pool(
+    pool = Pool(
         () => spawn(new Worker('./viewbot/export-viewer')),
         runInfo.workerCount
     )
 
     // enqueue our desired number of views, failures will requeue themselves
     for (i = 0; i < runInfo.viewCount; i++) {
+        runInfo.proxyIndex = i
         pool.queue(async (viewVideo) => {
             await runViewVideo(event, pool, viewVideo, runInfo)
         })
@@ -78,13 +80,24 @@ ipcMain.on('asynchronous-message', async (event, runInfo) => {
     // clean up thread pool
     await pool.completed()
     await pool.terminate()
+
+    // notify renderer process
+    event.reply('run-complete')
+})
+
+ipcMain.on('run-cancel', async (event) => {
+    console.log('\n\nCANCELLING RUN!!!!!\n\n')
+
+    // terminate existing thread pool, force-terminating tasks
+    await pool.terminate(true)
+    pool = Pool(() => {})
 })
 
 // attempts to viewVideo once
 async function runViewVideo(event, pool, viewVideo, runInfo) {
     // select proxy (repeat if viewCount is greater than 1:1)
     let proxy =
-        runInfo.proxies[runInfo.currentAttempt % runInfo.proxies.length]
+        runInfo.proxies[runInfo.proxyIndex % runInfo.proxies.length]
     console.log(`trying proxy: ${proxy}`)
     viewResult = await viewVideo(
         (searchString = runInfo.searchString),
@@ -96,8 +109,8 @@ async function runViewVideo(event, pool, viewVideo, runInfo) {
     )
 
     // update object and send results to renderer process
-    runInfo.currentAttempt += 1
-    event.reply('asynchronous-reply', viewResult)
+    runInfo.proxyIndex += 1
+    event.reply('individual-result', viewResult)
 
     // recurse (requeue) if we failed
     if (!viewResult) {
