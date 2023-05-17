@@ -7,114 +7,109 @@
             http-equiv="Content-Security-Policy"
             content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';"
         />
-        <style>
-            #page-one {
-                visibility: visible;
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-            #page-two {
-                visibility: hidden;
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-            #page-three {
-                visibility: hidden;
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-            #bot-input-form {
-                display: table;
-            }
-            #search-string {
-                /* pass */
-            }
-            #view-count {
-                width: 25px;
-            }
-            #min-view-s {
-                display: table-cell;
-                width: 25px;
-            }
-            #max-view-s {
-                display: table-cell;
-                width: 25px;
-            }
-            #worker-count {
-                width: 25px;
-            }
-        </style>
+        <head>
+            <link rel="stylesheet" href="output.css" />
+        </head>
         <title>my electron app title</title>
     </head>
     <body>
         <div id="page-one">
-            <h3>Start your run:</h3>
-            <form id="bot-input-form">
-                <label for="search-string">Search phrase:</label>
-                <input
-                    type="text"
-                    id="search-string"
-                    name="search-string"
-                /><br />
-                <label for="view-count">View count:</label>
-                <input
-                    type="text"
-                    id="view-count"
-                    name="view-count"
-                /><br />
-                <label for="min-view-s">View duration:</label>
-                <input type="text" id="min-view-s" name="min-view-s" /> -
-                <input type="text" id="max-view-s" name="max-view-s" />s
-                <label for="worker-count">Workers:</label>
-                <input
-                    type="text"
-                    id="worker-count"
-                    name="worker-count"
-                    value="1"
-                /><br />
-                <label for="proxy-list"
-                    >Proxies (IP:PORT, comma or newline separated)</label
-                ><br />
-                <textarea
-                    id="proxy-list"
-                    name="w3review"
-                    rows="5"
-                    cols="20"
-                >
-                </textarea>
-                <br />
-                <input
-                    type="button"
-                    value="Submit"
-                    id="form-submit-button"
-                />
-            </form>
+            <div class="content-padding">
+                <div class="header-text">Start your run:</div>
+            </div>
+            <div class="content-padding">
+                <div class="page-contents">
+                    <form id="bot-input-form">
+                        <label for="search-string">Search phrase:</label>
+                        <input
+                            type="text"
+                            id="search-string"
+                            name="search-string"
+                        /><br />
+                        <label for="view-count">View count:</label>
+                        <input
+                            type="text"
+                            id="view-count"
+                            name="view-count"
+                        /><br />
+                        <label for="min-view-s">View duration:</label>
+                        <input
+                            type="text"
+                            id="min-view-s"
+                            name="min-view-s"
+                        />
+                        -
+                        <input
+                            type="text"
+                            id="max-view-s"
+                            name="max-view-s"
+                        />s
+                        <label for="worker-count">Workers:</label>
+                        <input
+                            type="text"
+                            id="worker-count"
+                            name="worker-count"
+                            value="1"
+                        /><br />
+                        <label for="proxy-list"
+                            >Proxies (IP:PORT, comma or newline
+                            separated)</label
+                        ><br />
+                        <textarea
+                            id="proxy-list"
+                            name="w3review"
+                            rows="5"
+                            cols="20"
+                        >
+                        </textarea>
+                        <br />
+                        <input
+                            type="button"
+                            value="Submit"
+                            id="form-submit-button"
+                        />
+                    </form>
+                </div>
+            </div>
         </div>
         <div id="page-two">
-            <h3>Run in progress</h3>
-            To-do:
-            <div id="to-do-count"></div>
-            <br />
-            Succeeded:
-            <div id="succeeded-count"></div>
-            <br />
-            Failed:
-            <div id="failed-count"></div>
-            <br />
-            <input type="button" value="Cancel" id="cancel-button" />
+            <div class="content-padding">
+                <div class="header-text">Run in progress</div>
+            </div>
+            <div class="page-contents">
+                <div class="content-padding">
+                    To-do:
+                    <div id="to-do-count"></div>
+                    <br />
+                    Succeeded:
+                    <div id="succeeded-count"></div>
+                    <br />
+                    Failed:
+                    <div id="failed-count"></div>
+                    <br />
+                    <input
+                        type="button"
+                        value="Cancel"
+                        id="cancel-button"
+                    />
+                </div>
+            </div>
         </div>
         <div id="page-three">
-            <h3>Run Complete!</h3>
-            <input
-                type="button"
-                value="Kick off another run"
-                id="page-three-to-one"
-            />
-            <input type="button" value="Exit" id="exit-btn" />
+            <div class="content-padding">
+                <div class="header-text">Run Complete!</div>
+            </div>
+            <div class="page-contents">
+                <div class="content-padding">
+                    <input
+                        type="button"
+                        value="Kick off another run"
+                        id="page-three-to-one"
+                    />
+                    <input type="button" value="Exit" id="exit-btn" />
+                </div>
+            </div>
         </div>
-        <script src="js/renderer.js" defer></script>
+        <script src="renderer.js" defer></script>
     </body>
 </html>

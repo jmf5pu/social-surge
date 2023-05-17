@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "start": "electron .",
-    "format": "npx prettier --write ."
+    "format": "npx prettier --write .",
+    "build:css": "tailwindcss build ./renderer/styles.css -o ./renderer/output.css"
   },
   "author": "jmf5pu",
   "license": "ISC",
@@ -18,6 +19,8 @@
   },
   "dependencies": {
     "electron-webpack": "^2.8.2",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.3.2",
     "threads": "^1.7.0",
     "tiny-worker": "^2.3.0"
   },

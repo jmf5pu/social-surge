@@ -1,0 +1,61 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+body {
+    @apply bg-gray-900 text-gray-400;
+}
+
+div {
+    @apply text-inherit;
+}
+
+.content-padding {
+    @apply p-4;
+}
+.header-text {
+    @apply text-lg font-bold rounded-md bg-gray-800 p-1;
+}
+
+.page-contents {
+    @apply container mx-auto rounded-md bg-gray-800 p-1;
+}
+
+#page-one {
+    visibility: visible;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#page-two {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#page-three {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#bot-input-form {
+    display: table;
+}
+#search-string {
+    /* pass */
+}
+#view-count {
+    width: 25px;
+}
+#min-view-s {
+    display: table-cell;
+    width: 25px;
+}
+#max-view-s {
+    display: table-cell;
+    width: 25px;
+}
+#worker-count {
+    width: 25px;
+}
