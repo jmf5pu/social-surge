@@ -24,14 +24,7 @@ function createMainWindow() {
     if (isDev) {
         mainWindow.webContents.openDevTools()
     }
-    // OLD: mainWindow.loadFile(path.join(__dirname, './renderer/index.html'))
-    // react integration:
-    if(app.isPackaged) {
-        mainWindow.loadFile('index.html'); // prod
-    }else{
-    mainWindow.loadURL('http://localhost:3000'); // dev
-    }
-
+    mainWindow.loadFile(path.join(__dirname, './renderer/index.html'))
 }
 
 // Menu template
