@@ -18,11 +18,56 @@ textarea {
     @apply bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 px-4 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full resize-none;
 }
 
+.titlebar-drag-region {
+    -webkit-app-region: drag;
+    height: 30px;
+}
+
+.titlebar {
+    background-color: #1e293b;
+    height: 30px;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    color: #ffffff;
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+.window-controls {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.window-button {
+    width: 40px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-app-region: no-drag;
+    cursor: pointer;
+}
+
+.window-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.window-button span {
+    color: #ffffff;
+    font-size: 14px;
+}
+
 .scrollbar {
     @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-800 rounded-lg overflow-hidden;
 }
 .content-padding {
-    @apply p-4;
+    @apply p-4 mt-8;
 }
 .header-text {
     @apply text-lg font-bold rounded-md bg-gray-800 p-1;

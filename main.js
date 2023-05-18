@@ -13,6 +13,7 @@ function createMainWindow() {
         title: 'Pro Viewer',
         width: isDev ? 1000 : 500, // extend window for dev console
         height: 600,
+        frame: false,
         webPreferences: {
             contextIsolation: true,
             nodeIntegration: false,
@@ -48,9 +49,14 @@ app.whenReady().then(() => {
     })
 })
 
-// activates on exit button press
+// exit
 ipcMain.on('exit', () => {
     app.quit()
+})
+
+// minimize
+ipcMain.on('minimize-window', () => {
+    mainWindow.minimize()
 })
 
 // quit if all windows are closed
