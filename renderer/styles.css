@@ -10,6 +10,17 @@ div {
     @apply text-inherit;
 }
 
+input {
+    @apply bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+
+textarea {
+    @apply bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 px-4 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full resize-none;
+}
+
+.scrollbar {
+    @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-800 rounded-lg overflow-hidden;
+}
 .content-padding {
     @apply p-4;
 }
@@ -39,11 +50,9 @@ div {
     top: 0;
     left: 0;
 }
+
 #bot-input-form {
     display: table;
-}
-#search-string {
-    /* pass */
 }
 #view-count {
     width: 25px;
