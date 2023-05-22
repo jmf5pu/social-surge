@@ -1,4 +1,4 @@
-// view counts
+// view counts TODO: move this to model?
 var succeededCount = 0
 var failedCount = 0
 var todoCount = 0
@@ -112,7 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // go to page 3 when run is complete
-    window.ipcRenderer.on('run-complete', pageTwoToThree)
+    window.ipcRenderer.on('run-complete', ()=> {
+        console.log("run complete")
+        pageTwoToThree()
+    })
 })
 
 class RunInfo {

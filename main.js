@@ -5,7 +5,9 @@ const path = require('path')
 const isDev = process.env.NODE_ENV !== 'production'
 const isMac = process.platform === 'darwin'
 var pool = Pool(() => {})
+var currentProgress = -1
 let mainWindow
+
 
 // Create main window
 function createMainWindow() {
@@ -76,6 +78,7 @@ ipcMain.on('run-start', async (event, runInfo) => {
     )
 
     // enqueue our desired number of views, failures will requeue themselves
+    saveAndSetProgress(0.0)
     for (i = 0; i < runInfo.viewCount; i++) {
         runInfo.proxyIndex = i
         pool.queue(async (viewVideo) => {
@@ -83,9 +86,12 @@ ipcMain.on('run-start', async (event, runInfo) => {
         })
     }
 
-    // clean up thread pool
+    // cleanup pool after completion
     await pool.completed()
     await pool.terminate()
+
+    // remove progress bar (run complete)
+    saveAndSetProgress(-1.0)
 
     // notify renderer process
     event.reply('run-complete')
@@ -104,7 +110,6 @@ async function runViewVideo(event, pool, viewVideo, runInfo) {
     // select proxy (repeat if viewCount is greater than 1:1)
     let proxy =
         runInfo.proxies[runInfo.proxyIndex % runInfo.proxies.length]
-    console.log(`trying proxy: ${proxy}`)
     viewResult = await viewVideo(
         (searchString = runInfo.searchString),
         (minViewS = runInfo.minViewS),
@@ -118,10 +123,22 @@ async function runViewVideo(event, pool, viewVideo, runInfo) {
     runInfo.proxyIndex += 1
     event.reply('individual-result', viewResult)
 
+    // update icon progress bar
+    if(viewResult){
+        saveAndSetProgress(currentProgress + (1/runInfo.viewCount))
+    }
+
     // recurse (requeue) if we failed
     if (!viewResult) {
         pool.queue(async (viewVideo) => {
             await runViewVideo(event, pool, viewVideo, runInfo)
         })
     }
+}
+
+// sets icon progress bar value and saves to global variable
+function saveAndSetProgress(value){
+    console.log(`setting progress bar to ${value}`)
+    currentProgress = value
+    mainWindow.setProgressBar(value)
 }
