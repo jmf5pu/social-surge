@@ -48,7 +48,7 @@ async function viewVideo(
     const browser = await puppeteer.launch({
         headless: false,
         executablePath: chromiumPath,
-        args: ['--disable-dev-shm-usage', `--proxy-server=${proxy}`],
+        args: ['--window-position=-1000,-1000','--disable-dev-shm-usage', `--proxy-server=${proxy}`],
     })
 
     try {
@@ -57,15 +57,6 @@ async function viewVideo(
 
         const page = (await browser.pages())[0]
 
-        // minimize browser
-        const session = await page.target().createCDPSession()
-        const { windowId } = await session.send(
-            'Browser.getWindowForTarget'
-        )
-        await session.send('Browser.setWindowBounds', {
-            windowId,
-            bounds: { windowState: 'minimized' },
-        })
 
         await page.goto(
             'https://www.youtube.com/results?search_query=' + searchString

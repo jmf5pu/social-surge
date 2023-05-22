@@ -98,11 +98,12 @@ ipcMain.on('run-start', async (event, runInfo) => {
 })
 
 ipcMain.on('run-cancel', async (event) => {
-    console.log('\n\nCANCELLING RUN!!!!!\n\n')
+    console.log('\n\nCANCELLING RUN\n\n')
 
     // terminate existing thread pool, force-terminating tasks
     await pool.terminate(true)
     pool = Pool(() => {})
+    mainWindow.setProgressBar(-1)
 })
 
 // attempts to viewVideo once
