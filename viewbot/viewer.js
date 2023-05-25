@@ -48,7 +48,11 @@ async function viewVideo(
     const browser = await puppeteer.launch({
         headless: false,
         executablePath: chromiumPath,
-        args: ['--window-position=-1000,-1000','--disable-dev-shm-usage', `--proxy-server=${proxy}`],
+        args: [
+            '--window-position=-1000,-1000',
+            '--disable-dev-shm-usage',
+            `--proxy-server=${proxy}`,
+        ],
     })
 
     try {
@@ -56,7 +60,6 @@ async function viewVideo(
         var viewTimeMs = getRandomNumber(minViewS * 1000, maxViewS * 1000)
 
         const page = (await browser.pages())[0]
-
 
         await page.goto(
             'https://www.youtube.com/results?search_query=' + searchString
