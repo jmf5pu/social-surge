@@ -112,8 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // go to page 3 when run is complete
-    window.ipcRenderer.on('run-complete', ()=> {
-        console.log("run complete")
+    window.ipcRenderer.on('run-complete', () => {
+        console.log('run complete')
         pageTwoToThree()
     })
 })

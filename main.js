@@ -8,11 +8,10 @@ var pool = Pool(() => {})
 var currentProgress = -1
 let mainWindow
 
-
 // Create main window
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        title: 'Pro Viewer',
+        title: 'ViewBoostPro',
         width: isDev ? 1000 : 500, // extend window for dev console
         height: 600,
         frame: false,
@@ -125,8 +124,8 @@ async function runViewVideo(event, pool, viewVideo, runInfo) {
     event.reply('individual-result', viewResult)
 
     // update icon progress bar
-    if(viewResult){
-        saveAndSetProgress(currentProgress + (1/runInfo.viewCount))
+    if (viewResult) {
+        saveAndSetProgress(currentProgress + 1 / runInfo.viewCount)
     }
 
     // recurse (requeue) if we failed
@@ -138,7 +137,7 @@ async function runViewVideo(event, pool, viewVideo, runInfo) {
 }
 
 // sets icon progress bar value and saves to global variable
-function saveAndSetProgress(value){
+function saveAndSetProgress(value) {
     console.log(`setting progress bar to ${value}`)
     currentProgress = value
     mainWindow.setProgressBar(value)
