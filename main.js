@@ -2,23 +2,25 @@ const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const { spawn, Pool, Worker } = require('threads')
 const { parseProxies } = require('./utils.js')
 const path = require('path')
-const isDev = process.env.NODE_ENV !== 'production'
+const isDev = false //process.env.NODE_ENV !== 'production'
 const isMac = process.platform === 'darwin'
-var pool = Pool(() => {})
-var currentProgress = -1
+const dimensions = [385, 475] // width, height
+let pool = Pool(() => {})
+let currentProgress = -1
 let mainWindow
 
 // Create main window
 function createMainWindow() {
     mainWindow = new BrowserWindow({
         title: 'ViewBoostPro',
-        width: isDev ? 1000 : 500, // extend window for dev console
-        height: 600,
+        width: isDev ? dimensions[0] + 500 : dimensions[0], // extend window for dev console
+        height: 475,
         frame: false,
+        resizable: false,
         webPreferences: {
             contextIsolation: true,
             nodeIntegration: false,
-            preload: path.join(__dirname, 'preload.js'), // run preload script
+            preload: path.join(__dirname, 'preload.js'),
         },
     })
 

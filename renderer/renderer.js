@@ -61,8 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
         submitForm(runArgs)
 
         // go to next page
-        pageOne.style.visibility = 'hidden'
-        pageTwo.style.visibility = 'visible'
+        pageOne.style.display = 'none'
+        pageTwo.style.display = 'block'
     })
 
     // page 2 -> 3 (cancel a run)
@@ -74,8 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // page 3 -> 1
     pageThreeNextButton.addEventListener('click', (event) => {
         console.log('run complete')
-        pageThree.style.visibility = 'hidden'
-        pageOne.style.visibility = 'visible'
+        pageThree.style.display = 'none'
+        pageOne.style.display = 'hidden'
     })
 
     // exit app
@@ -102,8 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // go from page 2 to 3
     function pageTwoToThree() {
-        pageTwo.style.visibility = 'hidden'
-        pageThree.style.visibility = 'visible'
+        pageTwo.style.display = 'none'
+        pageThree.style.display = 'block'
     }
     // form submission
     function submitForm(formData) {

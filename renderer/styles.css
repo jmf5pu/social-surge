@@ -76,29 +76,24 @@ textarea {
 }
 
 .header-text {
-    @apply text-lg font-bold rounded-md bg-gray-800 p-4 mt-9 mx-auto;
+    @apply text-lg font-bold rounded-md bg-gray-800 p-2 mt-1 mx-auto;
 }
 .page-contents {
-    @apply rounded-md bg-gray-800 p-4 mt-2 mx-auto;
+    @apply rounded-md bg-gray-800 p-2 mt-2 mx-auto;
+}
+
+.content-padding {
+    @apply p-2;
 }
 
 #page-one {
-    visibility: visible;
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: block;
 }
 #page-two {
-    visibility: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: none;
 }
 #page-three {
-    visibility: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: none;
 }
 
 #bot-input-form {
