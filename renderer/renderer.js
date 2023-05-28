@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     pageThreeNextButton.addEventListener('click', (event) => {
         console.log('run complete')
         pageThree.style.display = 'none'
-        pageOne.style.display = 'hidden'
+        pageOne.style.display = 'block'
     })
 
     // exit app
