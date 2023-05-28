@@ -73,12 +73,12 @@ app.on('window-all-closed', () => {
 
 // starts the run
 ipcMain.on('run-start', async (event, runInfo) => {
-    process.env.SEARCHSTRING = runInfo.searchString;
-    process.env.VIEWCOUNT = runInfo.viewCount;
-    process.env.MINVIEWS = runInfo.minViewS;
-    process.env.MAXVIEWS = runInfo.maxViewS;
-    process.env.WORKERCOUNT = runInfo.workerCount;
-    process.env.PROXIES = runInfo.proxies;
+    process.env.SEARCHSTRING = runInfo.searchString
+    process.env.VIEWCOUNT = runInfo.viewCount
+    process.env.MINVIEWS = runInfo.minViewS
+    process.env.MAXVIEWS = runInfo.maxViewS
+    process.env.WORKERCOUNT = runInfo.workerCount
+    process.env.PROXIES = runInfo.proxies
     process.env.PROXYINDEX = runInfo.proxyIndex
     child_process = childProcessSpawn('node', ['childThread.js'], {
         stdio: 'inherit',

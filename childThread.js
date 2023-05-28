@@ -21,15 +21,30 @@ async function main(event) {
     for (i = 0; i < viewCount; i++) {
         proxyIndex = i
         pool.queue(async (viewVideo) => {
-            await runViewVideo(event, pool, viewVideo, searchString, minViewS, maxViewS, proxyIndex)
+            await runViewVideo(
+                event,
+                pool,
+                viewVideo,
+                searchString,
+                minViewS,
+                maxViewS,
+                proxyIndex
+            )
         })
     }
 
     // attempts to viewVideo once
-    async function runViewVideo(event, pool, viewVideo, searchString, minViewS, maxViewS, proxyIndex) {
+    async function runViewVideo(
+        event,
+        pool,
+        viewVideo,
+        searchString,
+        minViewS,
+        maxViewS,
+        proxyIndex
+    ) {
         // select proxy (repeat if viewCount is greater than 1:1)
-        let proxy =
-            proxies[proxyIndex % proxies.length]
+        let proxy = proxies[proxyIndex % proxies.length]
         viewResult = await viewVideo(
             (searchString = searchString),
             (minViewS = minViewS),
@@ -46,7 +61,15 @@ async function main(event) {
         // recurse (requeue) if we failed
         if (!viewResult) {
             pool.queue(async (viewVideo) => {
-                await runViewVideo(event, pool, viewVideo, searchString, minViewS, maxViewS, proxyIndex)
+                await runViewVideo(
+                    event,
+                    pool,
+                    viewVideo,
+                    searchString,
+                    minViewS,
+                    maxViewS,
+                    proxyIndex
+                )
             })
         }
     }
