@@ -3,11 +3,10 @@ const { spawn, Pool, Worker, Thread } = require('threads')
 const { parseProxies } = require('./utils.js')
 const path = require('path')
 const isDev = false //process.env.NODE_ENV !== 'production'
-const isMac = process.platform === 'darwin'
+//const isMac = process.platform === 'darwin'
 const dimensions = [385, 475] // width, height
 const childProcessSpawn = require('child_process').spawn
-let child_process = null
-let pool = Pool(() => {})
+let childProcess
 let currentProgress = -1
 let mainWindow
 
@@ -73,17 +72,18 @@ app.on('window-all-closed', () => {
 
 // starts the run
 ipcMain.on('run-start', async (event, runInfo) => {
-    process.env.SEARCHSTRING = runInfo.searchString
-    process.env.VIEWCOUNT = runInfo.viewCount
-    process.env.MINVIEWS = runInfo.minViewS
-    process.env.MAXVIEWS = runInfo.maxViewS
-    process.env.WORKERCOUNT = runInfo.workerCount
+    process.env.SEARCHSTRING = String(runInfo.searchString)
+    process.env.VIEWCOUNT = Number(runInfo.viewCount)
+    process.env.MINVIEWS = Number(runInfo.minViewS)
+    process.env.MAXVIEWS = Number(runInfo.maxViewS)
+    process.env.WORKERCOUNT = Number(runInfo.workerCount)
     process.env.PROXIES = runInfo.proxies
-    process.env.PROXYINDEX = runInfo.proxyIndex
-    child_process = childProcessSpawn('node', ['childThread.js'], {
+    process.env.PROXYINDEX = Number(runInfo.proxyIndex)
+    process.env.SUCCESSES = 0
+    currentProgress = 0
+    childProcess = childProcessSpawn('node', ['childThread.js'], {
         stdio: 'inherit',
     })
-
     process.env.SEARCHSTRING = null
     process.env.VIEWCOUNT = null
     process.env.MINVIEWS = null
@@ -91,20 +91,34 @@ ipcMain.on('run-start', async (event, runInfo) => {
     process.env.WORKERCOUNT = null
     process.env.PROXIES = null
     process.env.PROXYINDEX = null
+    process.env.SUCCESSES = 0
 })
 
-ipcMain.on('run-cancel', async (event) => {
-    child_process.kill()
+ipcMain.on('run-complete', async (event) => {
+    killChildAndUpdateProgress()
+})
 
-    // force terminate thread pool reset
-    // await pool.terminate(true)
-    // pool = Pool(() => {})
-    mainWindow.setProgressBar(-1)
+// TODO: No longer works because IPC doesn't work with child process
+ipcMain.on('individual-result', (viewResult) => {
+    console.log(`result in main.js: ${viewResult}`)
+
+    // send to renderer.js
+    ipcMain.send('individual-result', viewResult)
+
+    if (data.viewResult) {
+        saveAndSetProgress((currentProgress += 1 / process.env.VIEWCOUNT))
+    }
+    // TODO: handle updating UI with a view failure here
 })
 
 // sets icon progress bar value and saves to global variable
 function saveAndSetProgress(value) {
-    console.log(`setting progress bar to ${value}`)
+    //console.log(`setting progress bar to ${value}`)
     currentProgress = value
     mainWindow.setProgressBar(value)
+}
+
+function killChildAndUpdateProgress(){
+    childProcess.kill()
+    mainWindow.setProgressBar(-1)
 }

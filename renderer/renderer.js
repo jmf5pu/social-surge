@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // page 2 -> 3 (cancel a run)
     cancelButton.addEventListener('click', () => {
-        window.ipcRenderer.send('run-cancel')
+        window.ipcRenderer.send('run-complete')
         pageTwoToThree()
     })
 
@@ -87,8 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
         })
 
     // update view stats real time
-    window.ipcRenderer.on('individual-result', (event, args) => {
-        if (args) {
+    window.ipcRenderer.on('individual-result', (viewResult) => {
+        if (viewResult) {
             succeededCount += 1
             document.getElementById('succeeded-count').innerHTML =
                 succeededCount

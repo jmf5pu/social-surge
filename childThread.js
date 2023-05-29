@@ -2,15 +2,13 @@ const { parseProxies } = require('./utils.js')
 const { spawn, Pool, Worker, Thread } = require('threads')
 
 async function main(event) {
-    searchString = process.env.SEARCHSTRING
-    viewCount = process.env.VIEWCOUNT
-    minViewS = process.env.MINVIEWS
-    maxViewS = process.env.MAXVIEWS
-    workerCount = process.env.WORKERCOUNT
+    searchString = String(process.env.SEARCHSTRING)
+    viewCount = Number(process.env.VIEWCOUNT)
+    minViewS = Number(process.env.MINVIEWS)
+    maxViewS = Number(process.env.MAXVIEWS)
+    workerCount = Number(process.env.WORKERCOUNT)
     proxies = process.env.PROXIES
-    proxyIndex = process.env.PROXYINDEX
-
-    proxies = parseProxies(proxies)
+    proxyIndex = Number(process.env.PROXYINDEX)
 
     pool = Pool(
         () => spawn(new Worker('./viewbot/export-viewer')),
@@ -18,7 +16,9 @@ async function main(event) {
     )
 
     // enqueue our desired number of views, failures will requeue themselves
-    for (i = 0; i < viewCount; i++) {
+
+    // enqueue our desired number of views, failures will requeue themselves
+    for (i = 0; i < viewCount * 2; i++) {
         proxyIndex = i
         pool.queue(async (viewVideo) => {
             await runViewVideo(
@@ -53,10 +53,11 @@ async function main(event) {
             (chromiumPath =
                 'C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe') // TODO: figure out what to do with this param
         )
-
+                
         // update object and send results to renderer process
         proxyIndex += 1
-        // event.reply('individual-result', viewResult) TODO: figure out how to make process bar work
+        process.env.SUCCESSES += viewResult // TODO: possible type issue here 
+ 
 
         // recurse (requeue) if we failed
         if (!viewResult) {
@@ -72,6 +73,8 @@ async function main(event) {
                 )
             })
         }
+
+        // TODO: figure out how to communicate results back to main.js, and trigger cancel event when script is complete
     }
 }
 
