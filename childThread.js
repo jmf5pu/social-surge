@@ -53,11 +53,10 @@ async function main(event) {
             (chromiumPath =
                 'C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe') // TODO: figure out what to do with this param
         )
-                
+
         // update object and send results to renderer process
         proxyIndex += 1
-        process.env.SUCCESSES += viewResult // TODO: possible type issue here 
- 
+        process.env.SUCCESSES += viewResult // TODO: possible type issue here
 
         // recurse (requeue) if we failed
         if (!viewResult) {

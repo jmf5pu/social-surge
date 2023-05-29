@@ -118,7 +118,7 @@ function saveAndSetProgress(value) {
     mainWindow.setProgressBar(value)
 }
 
-function killChildAndUpdateProgress(){
+function killChildAndUpdateProgress() {
     childProcess.kill()
     mainWindow.setProgressBar(-1)
 }
