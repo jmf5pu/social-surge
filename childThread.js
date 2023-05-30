@@ -56,7 +56,8 @@ async function main(event) {
 
         // update object and send results to renderer process
         proxyIndex += 1
-        process.env.SUCCESSES += viewResult // TODO: possible type issue here
+        process.env.SUCCESSES += viewResult
+        console.log('Results: ', viewResult) // TODO: send correct data here
 
         // recurse (requeue) if we failed
         if (!viewResult) {
@@ -72,9 +73,6 @@ async function main(event) {
                 )
             })
         }
-
-        // TODO: figure out how to communicate results back to main.js, and trigger cancel event when script is complete
     }
 }
-
 main()

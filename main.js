@@ -81,9 +81,7 @@ ipcMain.on('run-start', async (event, runInfo) => {
     process.env.PROXYINDEX = Number(runInfo.proxyIndex)
     process.env.SUCCESSES = 0
     currentProgress = 0
-    childProcess = childProcessSpawn('node', ['childThread.js'], {
-        stdio: 'inherit',
-    })
+    childProcess = childProcessSpawn('node', ['childThread.js'])
     process.env.SEARCHSTRING = null
     process.env.VIEWCOUNT = null
     process.env.MINVIEWS = null
@@ -122,3 +120,18 @@ function killChildAndUpdateProgress() {
     childProcess.kill()
     mainWindow.setProgressBar(-1)
 }
+
+// setup stdout listeners for child_process thread
+ipcMain.on('run-start', async (event, runInfo) => {
+    childProcess.stdout.on('data', (data) => {
+        console.log('Child process stdout:', data.toString()) // TODO: use ipc to send results to renderer
+    })
+
+    childProcess.stderr.on('data', (data) => {
+        console.error('Child process stderr:', data.toString())
+    })
+
+    childProcess.on('close', (code) => {
+        console.log(`Child process exited with code ${code}`)
+    })
+})
