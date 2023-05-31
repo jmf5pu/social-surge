@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const { spawn, Pool, Worker, Thread } = require('threads')
 const { parseProxies } = require('./utils.js')
 const path = require('path')
-const isDev = false //process.env.NODE_ENV !== 'production'
+const isDev = true //process.env.NODE_ENV !== 'production'
 //const isMac = process.platform === 'darwin'
 const dimensions = [385, 475] // width, height
 const childProcessSpawn = require('child_process').spawn
@@ -96,19 +96,6 @@ ipcMain.on('run-complete', async (event) => {
     killChildAndUpdateProgress()
 })
 
-// TODO: No longer works because IPC doesn't work with child process
-ipcMain.on('individual-result', (viewResult) => {
-    console.log(`result in main.js: ${viewResult}`)
-
-    // send to renderer.js
-    ipcMain.send('individual-result', viewResult)
-
-    if (data.viewResult) {
-        saveAndSetProgress((currentProgress += 1 / process.env.VIEWCOUNT))
-    }
-    // TODO: handle updating UI with a view failure here
-})
-
 // sets icon progress bar value and saves to global variable
 function saveAndSetProgress(value) {
     //console.log(`setting progress bar to ${value}`)
@@ -124,14 +111,26 @@ function killChildAndUpdateProgress() {
 // setup stdout listeners for child_process thread
 ipcMain.on('run-start', async (event, runInfo) => {
     childProcess.stdout.on('data', (data) => {
-        console.log('Child process stdout:', data.toString()) // TODO: use ipc to send results to renderer
-    })
+        childOutput = data.toString()
+        console.log('Child process stdout:', childOutput)
 
-    childProcess.stderr.on('data', (data) => {
-        console.error('Child process stderr:', data.toString())
-    })
+        // check if we have hit out desired number of views
+        if (childOutput == 'run complete') {
+            killChildAndUpdateProgress()
+            return
+        }
 
-    childProcess.on('close', (code) => {
-        console.log(`Child process exited with code ${code}`)
+        // send results to renderer over IPC
+        dataArray = childOutput.split(' ')
+        ipAddress = dataArray[0].trim()
+        viewResult = dataArray[1].trim() === 'false' ? false : true
+
+        console.log(`sending ${viewResult} to renderer`)
+        mainWindow.webContents.send('individual-result', viewResult)
+
+        // update icon progress bar
+        saveAndSetProgress(
+            currentProgress + viewResult / process.env.VIEWCOUNT
+        )
     })
 })

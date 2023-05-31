@@ -55,9 +55,16 @@ async function main(event) {
         )
 
         // update object and send results to renderer process
-        proxyIndex += 1
         process.env.SUCCESSES += viewResult
-        console.log('Results: ', viewResult) // TODO: send correct data here
+
+        // send special message if we have hit our desired number of views
+        if (process.env.SUCCESSES >= process.env.VIEWCOUNT) {
+            console.log('complete')
+            return
+        }
+
+        // otherwise send indiviudal result data
+        console.log(proxy, viewResult) // TODO: figure out why proxy isn't as expected here
 
         // recurse (requeue) if we failed
         if (!viewResult) {
@@ -69,7 +76,7 @@ async function main(event) {
                     searchString,
                     minViewS,
                     maxViewS,
-                    proxyIndex
+                    (proxyIndex += 1)
                 )
             })
         }
