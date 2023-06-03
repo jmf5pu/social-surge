@@ -15,16 +15,10 @@ async function main(event) {
         workerCount
     )
 
-    /**
-     * TODO: proxy index logic still appears to not be working,
-     * workers will all start on the same proxy, hit proxies at the same time
-     */
-
     // enqueue our desired number of views, failures will requeue themselves
-    for (i = 0; i < Math.max(viewCount, workerCount) * 2; i++) {
-        var proxyIndex = i
+    for (let i = 0; i < Math.max(viewCount, workerCount) * 2; i++) {
         pool.queue(async (viewVideo) => {
-            await runViewVideo(event, pool, viewVideo, proxyIndex)
+            await runViewVideo(event, pool, viewVideo, i)
         })
     }
 
@@ -53,7 +47,7 @@ async function main(event) {
             return
         }
 
-        proxyIndex = proxyIndex + 1
+        proxyIndex += 1
 
         // recurse (requeue) if we failed
         if (!viewResult) {

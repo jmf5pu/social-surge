@@ -117,7 +117,7 @@ ipcMain.on('run-start', async (event, runInfo) => {
         console.log('Child process stdout:', childOutput)
 
         // Check if we have hit our desired number of views
-        if (childOutput.includes('complete')){
+        if (childOutput.includes('complete')) {
             cleanupRun()
             childProcess.stdout.removeListener('data', onData) // Remove the event listener
             return

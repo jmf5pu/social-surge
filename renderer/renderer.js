@@ -90,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
             window.ipcRenderer.send('exit')
         })
 
-    // update view stats real time TODO: figure out why false booleans aren't working here
     window.ipcRenderer.on('individual-result', (event, viewResult) => {
         if (viewResult) {
             succeededCount += 1
