@@ -1,13 +1,14 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
-const { spawn, Pool, Worker } = require('threads')
+const { spawn, Pool, Worker, Thread } = require('threads')
 const { parseProxies } = require('./utils.js')
 const path = require('path')
-const isDev = false //process.env.NODE_ENV !== 'production'
-const isMac = process.platform === 'darwin'
+const isDev = true //process.env.NODE_ENV !== 'production'
+//const isMac = process.platform === 'darwin'
 const dimensions = [385, 475] // width, height
-let pool = Pool(() => {})
-let currentProgress = -1
-let mainWindow
+const childProcessSpawn = require('child_process').spawn
+var currentProgress = -1
+var childProcess
+var mainWindow
 
 // Create main window
 function createMainWindow() {
@@ -69,78 +70,76 @@ app.on('window-all-closed', () => {
     }
 })
 
-// starts the run
-ipcMain.on('run-start', async (event, runInfo) => {
-    runInfo.proxies = parseProxies(runInfo.proxies)
-
-    pool = Pool(
-        () => spawn(new Worker('./viewbot/export-viewer')),
-        runInfo.workerCount
-    )
-
-    // enqueue our desired number of views, failures will requeue themselves
-    saveAndSetProgress(0.0)
-    for (i = 0; i < runInfo.viewCount; i++) {
-        runInfo.proxyIndex = i
-        pool.queue(async (viewVideo) => {
-            await runViewVideo(event, pool, viewVideo, runInfo)
-        })
-    }
-
-    // cleanup pool after completion
-    await pool.completed()
-    await pool.terminate()
-
-    // remove progress bar (run complete)
-    saveAndSetProgress(-1.0)
-
-    // notify renderer process
-    event.reply('run-complete')
+ipcMain.on('run-complete', async (event) => {
+    cleanupRun()
 })
-
-ipcMain.on('run-cancel', async (event) => {
-    console.log('\n\nCANCELLING RUN\n\n')
-
-    // terminate existing thread pool, force-terminating tasks
-    await pool.terminate(true)
-    pool = Pool(() => {})
-    mainWindow.setProgressBar(-1)
-})
-
-// attempts to viewVideo once
-async function runViewVideo(event, pool, viewVideo, runInfo) {
-    // select proxy (repeat if viewCount is greater than 1:1)
-    let proxy =
-        runInfo.proxies[runInfo.proxyIndex % runInfo.proxies.length]
-    viewResult = await viewVideo(
-        (searchString = runInfo.searchString),
-        (minViewS = runInfo.minViewS),
-        (maxViewS = runInfo.maxViewS),
-        (proxy = proxy),
-        (chromiumPath =
-            'C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe') // TODO: figure out what to do with this param
-    )
-
-    // update object and send results to renderer process
-    runInfo.proxyIndex += 1
-    event.reply('individual-result', viewResult)
-
-    // update icon progress bar
-    if (viewResult) {
-        saveAndSetProgress(currentProgress + 1 / runInfo.viewCount)
-    }
-
-    // recurse (requeue) if we failed
-    if (!viewResult) {
-        pool.queue(async (viewVideo) => {
-            await runViewVideo(event, pool, viewVideo, runInfo)
-        })
-    }
-}
 
 // sets icon progress bar value and saves to global variable
 function saveAndSetProgress(value) {
-    console.log(`setting progress bar to ${value}`)
     currentProgress = value
     mainWindow.setProgressBar(value)
 }
+
+function cleanupRun() {
+    // reset progress bar
+    saveAndSetProgress(-1)
+
+    // go to next page
+    mainWindow.webContents.send('run-complete')
+
+    // terminate child puppeteer process
+    childProcess.kill()
+
+    // clean up environment variables
+    process.env.SEARCHSTRING = null
+    process.env.VIEWCOUNT = null
+    process.env.MINVIEWS = null
+    process.env.MAXVIEWS = null
+    process.env.WORKERCOUNT = null
+    process.env.PROXIES = null
+    process.env.SUCCESSES = 0
+}
+
+// stat run and setup stdout listeners for child_process thread
+ipcMain.on('run-start', async (event, runInfo) => {
+    process.env.SEARCHSTRING = String(runInfo.searchString)
+    process.env.VIEWCOUNT = Number(runInfo.viewCount)
+    process.env.MINVIEWS = Number(runInfo.minViewS)
+    process.env.MAXVIEWS = Number(runInfo.maxViewS)
+    process.env.WORKERCOUNT = Number(runInfo.workerCount)
+    process.env.PROXIES = runInfo.proxies
+    process.env.SUCCESSES = 0
+    currentProgress = 0
+    childProcess = childProcessSpawn('node', ['childThread.js'])
+
+    const onData = (data) => {
+        childOutput = data.toString()
+        console.log('Child process stdout:', childOutput)
+
+        // Check if we have hit our desired number of views
+        if (childOutput.includes('complete')) {
+            cleanupRun()
+            childProcess.stdout.removeListener('data', onData) // Remove the event listener
+            return
+        }
+
+        // parse responses from child process
+        dataArray = childOutput.split(' ')
+        ipAddress = dataArray[0].trim()
+        viewResult = dataArray[1].trim() === 'false' ? false : true
+
+        mainWindow.webContents.send('individual-result', viewResult)
+
+        // Update icon progress bar
+        saveAndSetProgress(
+            currentProgress + viewResult / Number(process.env.VIEWCOUNT)
+        )
+    }
+
+    childProcess.stdout.on('data', onData)
+
+    // Listen for data on stderr (errors)
+    childProcess.stderr.on('data', (data) => {
+        console.error(`Child Process stderr: ${data}`)
+    })
+})

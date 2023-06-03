@@ -65,17 +65,21 @@ document.addEventListener('DOMContentLoaded', () => {
         pageTwo.style.display = 'block'
     })
 
-    // page 2 -> 3 (cancel a run)
+    // page 2 -> 3 (run cancelled)
     cancelButton.addEventListener('click', () => {
-        window.ipcRenderer.send('run-cancel')
+        window.ipcRenderer.send('run-complete')
+        pageTwoToThree()
+    })
+
+    // page 2 -> 3 (run completed)
+    window.ipcRenderer.on('run-complete', () => {
         pageTwoToThree()
     })
 
     // page 3 -> 1
     pageThreeNextButton.addEventListener('click', (event) => {
-        console.log('run complete')
         pageThree.style.display = 'none'
-        pageOne.style.display = 'hidden'
+        pageOne.style.display = 'block'
     })
 
     // exit app
@@ -86,9 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
             window.ipcRenderer.send('exit')
         })
 
-    // update view stats real time
-    window.ipcRenderer.on('individual-result', (event, args) => {
-        if (args) {
+    window.ipcRenderer.on('individual-result', (event, viewResult) => {
+        if (viewResult) {
             succeededCount += 1
             document.getElementById('succeeded-count').innerHTML =
                 succeededCount
@@ -107,15 +110,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // form submission
     function submitForm(formData) {
-        console.log('sending')
         window.ipcRenderer.send('run-start', formData)
     }
-
-    // go to page 3 when run is complete
-    window.ipcRenderer.on('run-complete', () => {
-        console.log('run complete')
-        pageTwoToThree()
-    })
 })
 
 class RunInfo {
@@ -133,7 +129,6 @@ class RunInfo {
         this.maxViewS = maxViewS
         this.workerCount = workerCount
         this.proxies = proxies
-        this.proxyIndex = 0
     }
     // TODO: validate fields here
 }
