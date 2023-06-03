@@ -6,9 +6,9 @@ const isDev = true //process.env.NODE_ENV !== 'production'
 //const isMac = process.platform === 'darwin'
 const dimensions = [385, 475] // width, height
 const childProcessSpawn = require('child_process').spawn
-let childProcess
-let currentProgress = -1
-let mainWindow
+var currentProgress = -1
+var childProcess
+var mainWindow
 
 // Create main window
 function createMainWindow() {
@@ -78,34 +78,37 @@ ipcMain.on('run-start', async (event, runInfo) => {
     process.env.MAXVIEWS = Number(runInfo.maxViewS)
     process.env.WORKERCOUNT = Number(runInfo.workerCount)
     process.env.PROXIES = runInfo.proxies
-    process.env.PROXYINDEX = Number(runInfo.proxyIndex)
     process.env.SUCCESSES = 0
     currentProgress = 0
+    console.log('starting child')
     childProcess = childProcessSpawn('node', ['childThread.js'])
+})
+
+ipcMain.on('run-complete', async (event) => {
+    cleanupRun()
+})
+
+// sets icon progress bar value and saves to global variable
+function saveAndSetProgress(value) {
+    currentProgress = value
+    mainWindow.setProgressBar(value)
+}
+
+function cleanupRun() {
+    // terminate child puppeteer process
+    childProcess.kill()
+
+    // reset progress bar
+    saveAndSetProgress(-1)
+
+    // clean up environment variables
     process.env.SEARCHSTRING = null
     process.env.VIEWCOUNT = null
     process.env.MINVIEWS = null
     process.env.MAXVIEWS = null
     process.env.WORKERCOUNT = null
     process.env.PROXIES = null
-    process.env.PROXYINDEX = null
     process.env.SUCCESSES = 0
-})
-
-ipcMain.on('run-complete', async (event) => {
-    killChildAndUpdateProgress()
-})
-
-// sets icon progress bar value and saves to global variable
-function saveAndSetProgress(value) {
-    //console.log(`setting progress bar to ${value}`)
-    currentProgress = value
-    mainWindow.setProgressBar(value)
-}
-
-function killChildAndUpdateProgress() {
-    childProcess.kill()
-    mainWindow.setProgressBar(-1)
 }
 
 // setup stdout listeners for child_process thread
@@ -115,22 +118,27 @@ ipcMain.on('run-start', async (event, runInfo) => {
         console.log('Child process stdout:', childOutput)
 
         // check if we have hit out desired number of views
-        if (childOutput == 'run complete') {
-            killChildAndUpdateProgress()
+        if (childOutput == 'complete') {
+            cleanupRun()
             return
         }
 
         // send results to renderer over IPC
         dataArray = childOutput.split(' ')
+
         ipAddress = dataArray[0].trim()
         viewResult = dataArray[1].trim() === 'false' ? false : true
 
-        console.log(`sending ${viewResult} to renderer`)
         mainWindow.webContents.send('individual-result', viewResult)
 
         // update icon progress bar
         saveAndSetProgress(
-            currentProgress + viewResult / process.env.VIEWCOUNT
+            currentProgress + viewResult / Number(process.env.VIEWCOUNT)
         )
+    })
+
+    // Listen for data on stderr (errors)
+    childProcess.stderr.on('data', (data) => {
+        console.error(`Child Process stderr: ${data}`)
     })
 })
