@@ -84,7 +84,6 @@ async function viewVideo(
         return true
     } catch (err) {
         await browser.close()
-        console.log(err.message)
         return false
     }
 }

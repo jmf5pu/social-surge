@@ -73,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // page 3 -> 1
     pageThreeNextButton.addEventListener('click', (event) => {
-        console.log('run complete')
         pageThree.style.display = 'none'
         pageOne.style.display = 'block'
     })
@@ -87,8 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })
 
     // update view stats real time TODO: figure out why false booleans aren't working here
-    window.ipcRenderer.on('individual-result', (viewResult) => {
-        console.log(viewResult)
+    window.ipcRenderer.on('individual-result', (event, viewResult) => {
         if (viewResult) {
             succeededCount += 1
             document.getElementById('succeeded-count').innerHTML =
@@ -108,13 +106,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // form submission
     function submitForm(formData) {
-        console.log('sending')
         window.ipcRenderer.send('run-start', formData)
     }
 
     // go to page 3 when run is complete
     window.ipcRenderer.on('run-complete', () => {
-        console.log('run complete')
         pageTwoToThree()
     })
 })
@@ -134,7 +130,6 @@ class RunInfo {
         this.maxViewS = maxViewS
         this.workerCount = workerCount
         this.proxies = proxies
-        this.proxyIndex = 0
     }
     // TODO: validate fields here
 }

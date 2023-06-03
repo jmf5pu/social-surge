@@ -99,7 +99,7 @@ function cleanupRun() {
     childProcess.kill()
 
     // reset progress bar
-    saveAndSetProgress(-1)
+    saveAndSetProgress(-1) // TODO: bar is staying full here, figure out why
 
     // clean up environment variables
     process.env.SEARCHSTRING = null
@@ -113,32 +113,36 @@ function cleanupRun() {
 
 // setup stdout listeners for child_process thread
 ipcMain.on('run-start', async (event, runInfo) => {
-    childProcess.stdout.on('data', (data) => {
-        childOutput = data.toString()
-        console.log('Child process stdout:', childOutput)
-
-        // check if we have hit out desired number of views
-        if (childOutput == 'complete') {
-            cleanupRun()
-            return
-        }
-
-        // send results to renderer over IPC
-        dataArray = childOutput.split(' ')
-
-        ipAddress = dataArray[0].trim()
-        viewResult = dataArray[1].trim() === 'false' ? false : true
-
-        mainWindow.webContents.send('individual-result', viewResult)
-
-        // update icon progress bar
-        saveAndSetProgress(
-            currentProgress + viewResult / Number(process.env.VIEWCOUNT)
-        )
-    })
-
+    const onData = (data) => {
+      childOutput = data.toString();
+      console.log('Child process stdout:', childOutput);
+  
+      // Check if we have hit our desired number of views
+      if (childOutput === 'complete') {
+        cleanupRun();
+        childProcess.stdout.removeListener('data', onData); // Remove the event listener
+        return;
+      }
+  
+      // Rest of the code will be executed until childOutput is 'complete'
+  
+      dataArray = childOutput.split(' ');
+      ipAddress = dataArray[0].trim();
+      viewResult = dataArray[1].trim() === 'false' ? false : true;
+  
+      mainWindow.webContents.send('individual-result', viewResult);
+  
+      // Update icon progress bar
+      saveAndSetProgress(
+        currentProgress + viewResult / Number(process.env.VIEWCOUNT)
+      );
+    };
+  
+    childProcess.stdout.on('data', onData);
+  
     // Listen for data on stderr (errors)
     childProcess.stderr.on('data', (data) => {
-        console.error(`Child Process stderr: ${data}`)
-    })
-})
+      console.error(`Child Process stderr: ${data}`);
+    });
+  });
+  
