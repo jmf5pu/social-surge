@@ -65,9 +65,14 @@ document.addEventListener('DOMContentLoaded', () => {
         pageTwo.style.display = 'block'
     })
 
-    // page 2 -> 3 (cancel a run)
+    // page 2 -> 3 (run cancelled)
     cancelButton.addEventListener('click', () => {
         window.ipcRenderer.send('run-complete')
+        pageTwoToThree()
+    })
+
+    // page 2 -> 3 (run completed)
+    window.ipcRenderer.on('run-complete', () => {
         pageTwoToThree()
     })
 
@@ -108,11 +113,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function submitForm(formData) {
         window.ipcRenderer.send('run-start', formData)
     }
-
-    // go to page 3 when run is complete
-    window.ipcRenderer.on('run-complete', () => {
-        pageTwoToThree()
-    })
 })
 
 class RunInfo {

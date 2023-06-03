@@ -21,7 +21,7 @@ async function main(event) {
      */
 
     // enqueue our desired number of views, failures will requeue themselves
-    for (i = 0; i < viewCount * 2; i++) {
+    for (i = 0; i < Math.max(viewCount, workerCount) * 2; i++) {
         var proxyIndex = i
         pool.queue(async (viewVideo) => {
             await runViewVideo(event, pool, viewVideo, proxyIndex)
