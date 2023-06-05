@@ -1,6 +1,4 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
-const { spawn, Pool, Worker, Thread } = require('threads')
-const { parseProxies } = require('./utils.js')
 const path = require('path')
 const isDev = true //process.env.NODE_ENV !== 'production'
 //const isMac = process.platform === 'darwin'

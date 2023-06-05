@@ -52,10 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
         todoCount = runArgs.viewCount
         succeededCount = 0
         failedCount = 0
-        document.getElementById('to-do-count').innerHTML = todoCount
-        document.getElementById('succeeded-count').innerHTML =
-            succeededCount
-        document.getElementById('failed-count').innerHTML = failedCount
+        //document.getElementById('to-do-count').innerHTML = todoCount
+        //document.getElementById('succeeded-count').innerHTML =    succeededCount
+        //document.getElementById('failed-count').innerHTML = failedCount
 
         // send data to main.js
         submitForm(runArgs)
@@ -93,13 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
     window.ipcRenderer.on('individual-result', (event, viewResult) => {
         if (viewResult) {
             succeededCount += 1
-            document.getElementById('succeeded-count').innerHTML =
-                succeededCount
+            //document.getElementById('succeeded-count').innerHTML = succeededCount
             todoCount -= 1
-            document.getElementById('to-do-count').innerHTML = todoCount
+            //document.getElementById('to-do-count').innerHTML = todoCount
         } else {
             failedCount += 1
-            document.getElementById('failed-count').innerHTML = failedCount
+            //document.getElementById('failed-count').innerHTML = failedCount
         }
     })
 

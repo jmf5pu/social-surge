@@ -6,10 +6,6 @@ body {
     @apply bg-gray-900 text-gray-400;
 }
 
-div {
-    @apply text-inherit;
-}
-
 input {
     @apply bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 px-3 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
 }
@@ -82,8 +78,34 @@ textarea {
     @apply rounded-md bg-gray-800 p-2 mt-2 mx-auto;
 }
 
+.flex-container {
+    @apply flex;
+}
+
+.left-result-column {
+    @apply flex-1 bg-transparent flex h-full items-center justify-center;
+}
+
+.middle-result-column {
+    @apply flex-1 bg-gradient-to-b from-green-500 to-transparent flex h-full items-center justify-center;
+}
+
+.right-result-column {
+    @apply flex-1 bg-gradient-to-b from-red-500 to-transparent flex h-full items-center justify-center;
+}
+
+
 .content-padding {
     @apply p-2;
+}
+
+.progress-bar-outer {
+    @apply w-full bg-gray-200 rounded-full;
+    height: 20px;
+}
+
+.progress-bar-inner {
+    @apply h-full bg-blue-500 rounded-full;
 }
 
 #page-one {

@@ -84,15 +84,17 @@
                 <div class="header-text">Run in progress</div>
                 <div class="page-contents">
                     <div class="content-padding">
-                        To-do:
-                        <div id="to-do-count"></div>
-                        <br />
-                        Succeeded:
-                        <div id="succeeded-count"></div>
-                        <br />
-                        Failed:
-                        <div id="failed-count"></div>
-                        <br />
+                        <div class="flex-container">
+                            <div class="left-result-column">Left</div>
+                            <div class="middle-result-column">Middle</div>
+                            <div class="right-result-column">Right</div>
+                        </div>                        
+                        <div class="progress-bar-outer">
+                            <div
+                                class="progress-bar-inner"
+                                style="width: 50%"
+                            ></div>
+                        </div>
                         <input
                             type="button"
                             value="Cancel"
