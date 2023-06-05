@@ -3,7 +3,7 @@
 @import 'tailwindcss/utilities';
 
 body {
-    @apply bg-gray-900 text-gray-400;
+    @apply bg-gray-900 text-white;
 }
 
 input {
@@ -75,25 +75,30 @@ textarea {
     @apply text-lg font-bold rounded-md bg-gray-800 p-2 mt-1 mx-auto;
 }
 .page-contents {
-    @apply rounded-md bg-gray-800 p-2 mt-2 mx-auto;
+    @apply rounded-md bg-gray-800 mt-2 mx-auto;
 }
 
 .flex-container {
-    @apply flex;
+    @apply flex h-32;
 }
 
 .left-result-column {
-    @apply flex-1 bg-transparent flex h-full items-center justify-center;
+    @apply flex flex-1 justify-center rounded-l-md bg-transparent;
 }
 
 .middle-result-column {
-    @apply flex-1 bg-gradient-to-b from-green-500 to-transparent flex h-full items-center justify-center;
+    @apply flex flex-1 justify-center bg-gradient-to-b from-green-500 to-transparent;
 }
 
 .right-result-column {
-    @apply flex-1 bg-gradient-to-b from-red-500 to-transparent flex h-full items-center justify-center;
+    @apply flex flex-1 justify-center rounded-r-md bg-gradient-to-b from-red-500 to-transparent;
 }
 
+.left-result-column p,
+.middle-result-column p,
+.right-result-column p {
+    @apply text-center mb-6;
+}
 
 .content-padding {
     @apply p-2;
@@ -120,4 +125,18 @@ textarea {
 
 #bot-input-form {
     display: table;
+}
+
+#to-do-count {
+    @apply text-xl;
+}
+#succeeded-count {
+    @apply text-xl transition-opacity duration-1000;
+}
+#failed-count {
+    @apply text-xl transition-opacity duration-1000;
+}
+.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
 }

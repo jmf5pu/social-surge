@@ -12,10 +12,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageThreeNextButton = document.querySelector(
         '#page-three-to-one'
     )
-
     const pageOne = document.getElementById('page-one')
     const pageTwo = document.getElementById('page-two')
     const pageThree = document.getElementById('page-three')
+    const succeeded = document.getElementById('succeeded-count')
+    const todo = document.getElementById('to-do-count')
+    const failed = document.getElementById('failed-count')
+    const incrementSucceeded = document.getElementById('succeeded-fade')
+    const incrementFailed = document.getElementById('failed-fade')
 
     // Add event listeners to handle button clicks
     closeButton.addEventListener('click', () => {
@@ -52,9 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
         todoCount = runArgs.viewCount
         succeededCount = 0
         failedCount = 0
-        //document.getElementById('to-do-count').innerHTML = todoCount
-        //document.getElementById('succeeded-count').innerHTML =    succeededCount
-        //document.getElementById('failed-count').innerHTML = failedCount
+        todo.innerHTML = todoCount
+        succeeded.innerHTML = succeededCount
+        failed.innerHTML = failedCount
 
         // send data to main.js
         submitForm(runArgs)
@@ -91,13 +95,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.ipcRenderer.on('individual-result', (event, viewResult) => {
         if (viewResult) {
+            // update success counter
             succeededCount += 1
-            //document.getElementById('succeeded-count').innerHTML = succeededCount
+            succeeded.innerHTML = succeededCount
+
+            // animation
+            incrementSucceeded.innerHTML = '+1'
+            incrementSucceeded.classList.add('fade-out')
+            setTimeout(() => {
+                incrementSucceeded.innerHTML = ''
+                incrementSucceeded.classList.remove('fade-out')
+            }, 1000) // Remove the 'fade-out' class after 1 second
+
+            // update todo counter
             todoCount -= 1
-            //document.getElementById('to-do-count').innerHTML = todoCount
+            todo.innerHTML = todoCount
         } else {
+            // update failure counter
             failedCount += 1
-            //document.getElementById('failed-count').innerHTML = failedCount
+            failed.innerHTML = failedCount
+
+            // animation
+            incrementFailed.innerHTML = '+1'
+            incrementFailed.classList.add('fade-out')
+            setTimeout(() => {
+                incrementFailed.innerHTML = ''
+                incrementFailed.classList.remove('fade-out')
+            }, 1000)
         }
     })
 

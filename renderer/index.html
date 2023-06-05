@@ -83,12 +83,30 @@
             <div class="content-padding">
                 <div class="header-text">Run in progress</div>
                 <div class="page-contents">
+                    <div class="flex-container">
+                        <div class="left-result-column">
+                            <div class="text-center">
+                                <p>To-do</p>
+                                <p id="to-do-count"></p>
+                            </div>
+                        </div>
+                        <div class="middle-result-column">
+                            <div class="text-center">
+                                <p>Completed</p>
+                                <p id="succeeded-count"></p>
+                                <div id="succeeded-fade"></div>
+                            </div>
+                        </div>
+                        <div class="right-result-column">
+                            <div class="text-center">
+                                <p>Failed</p>
+                                <p id="failed-count"></p>
+                                <div id="failed-fade"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
                     <div class="content-padding">
-                        <div class="flex-container">
-                            <div class="left-result-column">Left</div>
-                            <div class="middle-result-column">Middle</div>
-                            <div class="right-result-column">Right</div>
-                        </div>                        
                         <div class="progress-bar-outer">
                             <div
                                 class="progress-bar-inner"
