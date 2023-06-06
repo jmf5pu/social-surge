@@ -104,12 +104,12 @@ textarea {
     @apply p-2;
 }
 
-.progress-bar-outer {
+#progress-bar-outer {
     @apply w-full bg-gray-200 rounded-full;
     height: 20px;
 }
 
-.progress-bar-inner {
+#progress-bar-inner {
     @apply h-full bg-blue-500 rounded-full;
 }
 

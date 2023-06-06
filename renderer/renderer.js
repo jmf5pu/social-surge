@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const failed = document.getElementById('failed-count')
     const incrementSucceeded = document.getElementById('succeeded-fade')
     const incrementFailed = document.getElementById('failed-fade')
-
+    const progressBar = document.getElementById('progress-bar-inner')
     // Add event listeners to handle button clicks
     closeButton.addEventListener('click', () => {
         window.ipcRenderer.send('exit')
@@ -110,6 +110,10 @@ document.addEventListener('DOMContentLoaded', () => {
             // update todo counter
             todoCount -= 1
             todo.innerHTML = todoCount
+
+            // update progress bar
+            widthRatio = succeededCount / (succeededCount + todoCount)
+            progressBar.style.width = `${widthRatio * 100}%`
         } else {
             // update failure counter
             failedCount += 1

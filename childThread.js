@@ -26,6 +26,7 @@ async function main(event) {
     async function runViewVideo(event, pool, viewVideo, proxyIndex) {
         // select proxy (repeat if viewCount is greater than 1:1)
         var proxy = proxies[proxyIndex % proxies.length]
+        // TODO: pull seconds calculation here, parametarize
         viewResult = await viewVideo(
             searchString,
             minViewS,
@@ -38,7 +39,7 @@ async function main(event) {
         successes += viewResult
 
         // send individual run results
-        console.log(proxy, viewResult, successes)
+        console.log(proxy, viewResult, successes) // TODO: pass seconds back to renderer to display
 
         // send special message if we have hit our desired number of views
         if (successes >= viewCount) {
