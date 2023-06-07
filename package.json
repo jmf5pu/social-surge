@@ -1,5 +1,5 @@
 {
-  "name": "pro-viewer",
+  "name": "social-surge",
   "version": "1.0.0",
   "description": "automates social media views using puppeteer",
   "main": "main.js",
