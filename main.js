@@ -112,10 +112,10 @@ ipcMain.on('run-start', async (event, runInfo) => {
 
     const onData = (data) => {
         childOutput = data.toString()
-        console.log('Child process stdout:', childOutput)
+        console.log('[Child] ', childOutput)
 
         // Check if we have hit our desired number of views
-        if (childOutput.includes('complete')) {
+        if (childOutput.includes('all views completed')) {
             cleanupRun()
             childProcess.stdout.removeListener('data', onData) // Remove the event listener
             return
@@ -123,10 +123,23 @@ ipcMain.on('run-start', async (event, runInfo) => {
 
         // parse responses from child process
         dataArray = childOutput.split(' ')
-        ipAddress = dataArray[0].trim()
-        viewResult = dataArray[1].trim() === 'false' ? false : true
+        if (dataArray[0].trim() === 'started') {
+            mainWindow.webContents.send(
+                'individual-view-start',
+                dataArray[1]
+            )
+            return
+        } else if (dataArray[0].trim() === 'completed') {
+            ipAddress = dataArray[1].trim()
+            viewResult = dataArray[2].trim() === 'false' ? false : true
+            viewTimeMs = Number(dataArray[3].trim())
+        }
 
-        mainWindow.webContents.send('individual-result', viewResult)
+        mainWindow.webContents.send(
+            'individual-result',
+            viewResult,
+            viewTimeMs
+        )
 
         // Update icon progress bar
         saveAndSetProgress(
@@ -138,6 +151,6 @@ ipcMain.on('run-start', async (event, runInfo) => {
 
     // Listen for data on stderr (errors)
     childProcess.stderr.on('data', (data) => {
-        console.error(`Child Process stderr: ${data}`)
+        console.error(`[Child Error] ${data}`)
     })
 })
