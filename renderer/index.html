@@ -30,54 +30,62 @@
             <div class="content-padding">
                 <div class="header-text">Start your run:</div>
                 <div class="page-contents">
-                    <form id="bot-input-form">
-                        <label for="search-string">Search phrase:</label>
-                        <input
-                            type="text"
-                            id="search-string"
-                            name="search-string"
-                        /><br />
-                        <label for="view-count">View count:</label>
-                        <input
-                            type="text"
-                            id="view-count"
-                            class="small-input"
-                        /><br />
-                        <label for="min-view-s">View duration:</label>
-                        <input
-                            type="text"
-                            id="min-view-s"
-                            class="second-input"
-                        />
-                        -
-                        <input
-                            type="text"
-                            id="max-view-s"
-                            class="second-input"
-                        />s
-                        <br />
-                        <label for="worker-count">Workers:</label>
-                        <input
-                            type="text"
-                            id="worker-count"
-                            class="small-input"
-                            value="1"
-                        /><br />
-                        <label for="proxy-list"
-                            >Proxies (IP:PORT, comma or newline
-                            separated)</label
-                        ><br />
-                        <div class="scrollbar">
-                            <textarea id="proxy-list" rows="5" cols="20">
-                            </textarea>
-                        </div>
-                        <br />
-                        <input
-                            type="button"
-                            value="Submit"
-                            id="form-submit-button"
-                        />
-                    </form>
+                    <div class="content-padding">
+                        <form id="bot-input-form">
+                            <label for="search-string"
+                                >Search phrase:</label
+                            >
+                            <input
+                                type="text"
+                                id="search-string"
+                                name="search-string"
+                            /><br />
+                            <label for="view-count">View count:</label>
+                            <input
+                                type="text"
+                                id="view-count"
+                                class="small-input"
+                            /><br />
+                            <label for="min-view-s">View duration:</label>
+                            <input
+                                type="text"
+                                id="min-view-s"
+                                class="second-input"
+                            />
+                            -
+                            <input
+                                type="text"
+                                id="max-view-s"
+                                class="second-input"
+                            />s
+                            <br />
+                            <label for="worker-count">Workers:</label>
+                            <input
+                                type="text"
+                                id="worker-count"
+                                class="small-input"
+                                value="1"
+                            /><br />
+                            <label for="proxy-list"
+                                >Proxies (IP:PORT, comma or newline
+                                separated)</label
+                            ><br />
+                            <div class="scrollbar">
+                                <textarea
+                                    id="proxy-list"
+                                    rows="5"
+                                    cols="20"
+                                >
+                                </textarea>
+                            </div>
+                            <br />
+                            <input
+                                type="button"
+                                value="Submit"
+                                id="form-submit-button"
+                            />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -90,20 +98,26 @@
                         <div class="left-result-column">
                             <div class="text-center">
                                 <p>To-do</p>
-                                <p id="to-do-count"></p>
+                                <p id="to-do-count" class="view-count"></p>
                             </div>
                         </div>
                         <div class="middle-result-column">
                             <div class="text-center">
                                 <p>Completed</p>
-                                <p id="succeeded-count"></p>
+                                <p
+                                    id="succeeded-count"
+                                    class="view-count"
+                                ></p>
                                 <div id="succeeded-fade"></div>
                             </div>
                         </div>
                         <div class="right-result-column">
                             <div class="text-center">
                                 <p>Failed</p>
-                                <p id="failed-count"></p>
+                                <p
+                                    id="failed-count"
+                                    class="view-count"
+                                ></p>
                                 <div id="failed-fade"></div>
                             </div>
                         </div>

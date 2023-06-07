@@ -53,7 +53,7 @@ async function main(event) {
             'completed',
             proxy,
             viewResult,
-            viewTimeMs ? viewTimeMs : 0
+            viewResult ? viewTimeMs : 0
         )
 
         // send special message if we have hit our desired number of views

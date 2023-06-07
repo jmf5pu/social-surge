@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const path = require('path')
-const isDev = true //process.env.NODE_ENV !== 'production'
+const isDev = false
 //const isMac = process.platform === 'darwin'
 const dimensions = [385, 475] // width, height
 const childProcessSpawn = require('child_process').spawn
@@ -11,7 +11,7 @@ var mainWindow
 // Create main window
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        title: 'ViewBoostPro',
+        title: 'Social Surge',
         width: isDev ? dimensions[0] + 500 : dimensions[0], // extend window for dev console
         height: 475,
         frame: false,
