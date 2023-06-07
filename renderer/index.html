@@ -10,6 +10,7 @@
         <link rel="stylesheet" href="output.css" />
     </head>
     <body>
+        <!-- title bar -->
         <div class="titlebar-drag-region">
             <div class="titlebar">
                 <div id="titlebar-drag-region"></div>
@@ -24,6 +25,7 @@
                 </div>
             </div>
         </div>
+        <!-- page 1 -->
         <div id="page-one">
             <div class="content-padding">
                 <div class="header-text">Start your run:</div>
@@ -79,6 +81,7 @@
                 </div>
             </div>
         </div>
+        <!-- page 2 -->
         <div id="page-two">
             <div class="content-padding">
                 <div class="header-text">Run in progress</div>
@@ -107,6 +110,7 @@
                     </div>
                     <br />
                     <div class="content-padding">
+                        <div id="current-proxy"></div>
                         <div id="progress-bar-outer">
                             <div
                                 id="progress-bar-inner"
@@ -122,11 +126,13 @@
                 </div>
             </div>
         </div>
+        <!-- page 3 -->
         <div id="page-three">
             <div class="content-padding">
                 <div class="header-text">Run Complete!</div>
                 <div class="page-contents">
                     <div class="content-padding">
+                        <div id="total-view-time"></div>
                         <input
                             type="button"
                             value="Kick off another run"
