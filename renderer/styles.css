@@ -94,14 +94,15 @@ textarea {
     @apply flex flex-1 justify-center rounded-r-md bg-gradient-to-b from-red-500 to-transparent;
 }
 
-.left-result-column p,
-.middle-result-column p,
-.right-result-column p {
+.result-column-inner {
+    @apply text-center items-center;
+}
+.count-header {
     @apply text-center mb-6;
 }
 
 .view-count {
-    @apply text-4xl;
+    @apply text-center text-4xl mb-1;
 }
 
 .content-padding {
