@@ -98,11 +98,16 @@ textarea {
     @apply text-center items-center;
 }
 .count-header {
-    @apply text-center mb-6;
+    @apply text-center mb-5;
 }
 
 .view-count {
     @apply text-center text-4xl mb-1;
+}
+
+.loading-wheel {
+    height: 20px;
+    width: 20px;
 }
 
 .content-padding {
@@ -132,6 +137,7 @@ textarea {
     display: table;
 }
 
+/* animation stuff */
 .fade-out {
     opacity: 0;
     transition: opacity 1s ease-out;
