@@ -24,6 +24,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentProxy = document.getElementById('current-proxy')
     const totalViewTime = document.getElementById('total-view-time')
 
+    const topRow = document.getElementById('top-row')
+    const middleRow = document.getElementById('middle-row')
+    const bottomRow = document.getElementById('bottom-row')
+
+    // perform running proxies animation
+    document.getElementById('anim-button').addEventListener('click', () => {
+        let topRowTemp = topRow.innerHTML
+        let middleRowTemp = middleRow.innerHTML
+        let bottomRowTemp = bottomRow.innerHTML
+
+        // clear bottom row
+        bottomRow.innerHTML = ""
+
+        // move top row down and lighten
+        topRow.classList.add('animated-text-lighten')
+        topRow.addEventListener('animationend', () =>{
+            topRow.classList.remove('animated-text-lighten')
+            topRow.innerHTML = bottomRowTemp
+            middleRow.innerHTML = topRowTemp
+        })
+
+        // move middle row down and darken
+        middleRow.classList.add('animated-text-darken')
+        middleRow.addEventListener('animationend', () => {
+            middleRow.classList.remove('animated-text-darken')
+            bottomRow.innerHTML = middleRowTemp
+        })        
+    })
+    
     // Add event listeners to handle button clicks
     closeButton.addEventListener('click', () => {
         window.ipcRenderer.send('exit')
