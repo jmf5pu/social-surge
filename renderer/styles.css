@@ -145,44 +145,44 @@ textarea {
 
 @keyframes shiftDownAndBrighten {
     0% {
-      transform: translateY(0);
-      opacity: 0.25;
+        transform: translateY(0);
+        opacity: 0.25;
     }
     100% {
-      transform: translateY(1.5em);
-      opacity: 1;
+        transform: translateY(1.5em);
+        opacity: 1;
     }
-  }
+}
 
-  @keyframes shiftDownAndDarken {
+@keyframes shiftDownAndDarken {
     0% {
-      transform: translateY(0);
-      opacity: 1;
+        transform: translateY(0);
+        opacity: 1;
     }
     100% {
-      transform: translateY(1.5em);
-      opacity: 0.25;
+        transform: translateY(1.5em);
+        opacity: 0.25;
     }
-  }
+}
 
-  /* top and bottom rows */
-  .dark-ip-address{
-    opacity: 0.25
-  }
+/* top and bottom rows */
+.dark-ip-address {
+    opacity: 0.25;
+}
 
-  /* middle row */
-  .light-ip-address{
+/* middle row */
+.light-ip-address {
     opacity: 1;
-  }
-  
-  .animated-text-lighten {
+}
+
+.animated-text-lighten {
     animation-name: shiftDownAndBrighten;
     animation-duration: 1s;
     animation-fill-mode: forwards;
-  }
-    
-  .animated-text-darken {
+}
+
+.animated-text-darken {
     animation-name: shiftDownAndDarken;
     animation-duration: 1s;
     animation-fill-mode: forwards;
-  }
+}
