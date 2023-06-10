@@ -105,17 +105,12 @@ textarea {
     @apply text-center text-4xl mb-1;
 }
 
-.loading-wheel {
-    height: 20px;
-    width: 20px;
-}
-
 .content-padding {
     @apply p-2;
 }
 
 #progress-bar-outer {
-    @apply w-full bg-gray-200 rounded-full;
+    @apply w-full bg-gray-200 rounded-full p-2;
     height: 20px;
 }
 
@@ -135,6 +130,19 @@ textarea {
 
 #bot-input-form {
     display: table;
+}
+
+/* page 2 proxy display stuff */
+.proxy-display-container {
+    @apply flex p-2;
+}
+
+.loading-wheel-div {
+    @apply flex-1 p-2 items-center justify-center;
+}
+
+.proxy-display-div {
+    @apply flex-1 p-2;
 }
 
 /* animation stuff */
@@ -185,4 +193,41 @@ textarea {
     animation-name: shiftDownAndDarken;
     animation-duration: 1s;
     animation-fill-mode: forwards;
+}
+
+/* loading wheel stuff */
+.lds-ring {
+    display: inline-block;
+    position: relative;
+    width: 40px;
+    height: 40px;
+}
+.lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    margin: 4px;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

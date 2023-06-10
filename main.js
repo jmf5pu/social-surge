@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const path = require('path')
-const isDev = false
+const isDev = true
 //const isMac = process.platform === 'darwin'
 const dimensions = [385, 475] // width, height
 const childProcessSpawn = require('child_process').spawn
@@ -137,6 +137,7 @@ ipcMain.on('run-start', async (event, runInfo) => {
 
         mainWindow.webContents.send(
             'individual-result',
+            ipAddress,
             viewResult,
             viewTimeMs
         )

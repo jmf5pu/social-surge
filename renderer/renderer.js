@@ -66,7 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
         todo.innerHTML = todoCount
         succeeded.innerHTML = succeededCount
         failed.innerHTML = failedCount
-
+        topRow.innerHTML = ''
+        middleRow.innerHTML = ''
+        bottomRow.innerHTML = ''
         // send data to main.js
         submitForm(runArgs)
 
@@ -128,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.ipcRenderer.on(
         'individual-result',
-        (event, viewResult, viewTimeMs) => {
+        (event, ipAddress, viewResult, viewTimeMs) => {
             totalViewTimeMs += viewTimeMs
 
             if (viewResult) {
