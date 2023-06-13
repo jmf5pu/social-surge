@@ -94,7 +94,7 @@
             <div class="content-padding">
                 <div class="header-text">Run in progress</div>
                 <div class="page-contents">
-                    <div class="flex-container">
+                    <div class="flex-container-view-counts">
                         <div class="left-result-column">
                             <div class="result-column-inner">
                                 <p class="count-header">To-do</p>
@@ -129,31 +129,43 @@
                         </div>
                     </div>
                     <div class="content-padding">
-                        <div class="lds-ring">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
+                        <div class="flex-container-proxy-display">
+                            <div class="proxy-display-col-1">Trying:</div>
+                            <div class="proxy-display-col-2">
+                                <div
+                                    id="top-row"
+                                    class="dark-ip-address"
+                                ></div>
+                                <div
+                                    id="middle-row"
+                                    class="light-ip-address"
+                                ></div>
+                                <div
+                                    id="bottom-row"
+                                    class="dark-ip-address"
+                                ></div>
+                            </div>
+                            <div class="proxy-display-col-3">
+                                <div class="lds-ring">
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                    <div></div>
+                                </div>
+                            </div>
                         </div>
-                        <br />
-                        <div id="top-row" class="dark-ip-address"></div>
-                        <div
-                            id="middle-row"
-                            class="light-ip-address"
-                        ></div>
-                        <div id="bottom-row" class="dark-ip-address"></div>
+                        <div id="progress-bar-outer">
+                            <div
+                                id="progress-bar-inner"
+                                style="width: 0%"
+                            ></div>
+                        </div>
+                        <input
+                            type="button"
+                            value="Cancel"
+                            id="cancel-button"
+                        />
                     </div>
-                    <div id="progress-bar-outer">
-                        <div
-                            id="progress-bar-inner"
-                            style="width: 0%"
-                        ></div>
-                    </div>
-                    <input
-                        type="button"
-                        value="Cancel"
-                        id="cancel-button"
-                    />
                 </div>
             </div>
         </div>

@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const path = require('path')
-const isDev = true
+const isDev = false
 //const isMac = process.platform === 'darwin'
 const dimensions = [385, 475] // width, height
 const childProcessSpawn = require('child_process').spawn
