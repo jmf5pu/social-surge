@@ -3,19 +3,15 @@
 @import 'tailwindcss/utilities';
 
 body {
-    @apply bg-gray-900 text-gray-400;
-}
-
-div {
-    @apply text-inherit;
+    @apply bg-gray-900 text-white;
 }
 
 input {
-    @apply bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 px-3 py-1 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+    @apply bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 px-3 py-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
 }
 
 textarea {
-    @apply bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 px-3 py-1 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 w-full resize-none;
+    @apply bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 px-3 py-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 w-full resize-none;
 }
 
 .titlebar-drag-region {
@@ -76,15 +72,66 @@ textarea {
 }
 
 .header-text {
-    @apply text-lg font-bold rounded-md bg-gray-800 p-2 mt-1 mx-auto;
+    @apply text-xl rounded-md bg-gray-800 p-2 mt-1 mx-auto;
 }
 .page-contents {
-    @apply rounded-md bg-gray-800 p-2 mt-2 mx-auto;
+    @apply text-base rounded-md bg-gray-800 mt-2 mx-auto;
+}
+
+/* page 2 stuff */
+.flex-container-view-counts {
+    @apply flex h-32;
+}
+
+.flex-container-proxy-display {
+    @apply flex h-24;
+}
+
+.left-result-column {
+    @apply flex flex-1 justify-center rounded-l-md bg-gradient-to-b from-blue-500 to-transparent;
+}
+
+.middle-result-column {
+    @apply flex flex-1 justify-center bg-gradient-to-b from-green-500 to-transparent;
+}
+
+.right-result-column {
+    @apply flex flex-1 justify-center rounded-r-md bg-gradient-to-b from-red-500 to-transparent;
+}
+
+.result-column-inner {
+    @apply text-center items-center;
+}
+.count-header {
+    @apply text-center mb-5;
+}
+
+.view-count {
+    @apply text-center text-4xl mb-1;
 }
 
 .content-padding {
     @apply p-2;
 }
+
+#progress-bar-outer {
+    @apply w-full bg-gray-900 rounded-full mb-2;
+    height: 20px;
+}
+
+#progress-bar-inner {
+    @apply h-full bg-blue-700 rounded-full;
+}
+
+#cancel-button {
+    @apply focus:ring-red-300 focus:border-red-300;
+}
+#cancel-button:hover {
+    @apply focus:ring-red-300 focus:border-red-300;
+    background-color: #ff0000;
+}
+
+/*   */
 
 #page-one {
     display: block;
@@ -98,4 +145,105 @@ textarea {
 
 #bot-input-form {
     display: table;
+}
+
+/* page 2 proxy display stuff */
+.proxy-display-col-1 {
+    @apply flex flex-1 items-center justify-end text-right p-2;
+}
+
+.proxy-display-col-2 {
+    @apply flex flex-col items-center justify-center overflow-hidden;
+    width: 180px;
+}
+
+.proxy-display-col-3 {
+    @apply flex flex-1 items-center p-2 justify-start;
+}
+
+/* animation stuff */
+.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease-out;
+}
+
+@keyframes shiftDownAndBrighten {
+    0% {
+        transform: translateY(0);
+        opacity: 0.25;
+    }
+    100% {
+        transform: translateY(0.9em);
+        opacity: 1;
+    }
+}
+
+@keyframes shiftDownAndDarken {
+    0% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0.9em);
+        opacity: 0.25;
+    }
+}
+
+/* top and bottom rows */
+.dark-ip-address {
+    opacity: 0.25;
+}
+
+/* middle row */
+.light-ip-address {
+    opacity: 1;
+}
+
+.animated-text-lighten {
+    animation-name: shiftDownAndBrighten;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.animated-text-darken {
+    animation-name: shiftDownAndDarken;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+/* loading wheel stuff */
+.lds-ring {
+    position: absolute;
+    top: 52px;
+    left: 327px;
+    width: 32px;
+    height: 32px;
+}
+.lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border: 4px solid #fff;
+    border-radius: 50%;
+    animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+    animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+    animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+    animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

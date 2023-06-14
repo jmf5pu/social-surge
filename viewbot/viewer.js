@@ -29,18 +29,12 @@ async function clickAndWaitIfPresent(
     } catch {}
 }
 
-function getRandomNumber(min, max) {
-    /*
-generates a random number between the specified max and min (inclusive))
-*/
-    return min + Math.floor(Math.random() * (max + 1 - min))
-}
-
 async function viewVideo(
     searchString,
     minViewS,
     maxViewS,
     proxy,
+    viewTimeMs,
     chromiumPath
 ) {
     // setup
@@ -56,9 +50,6 @@ async function viewVideo(
     })
 
     try {
-        // get view duration in ms
-        var viewTimeMs = getRandomNumber(minViewS * 1000, maxViewS * 1000)
-
         const page = (await browser.pages())[0]
 
         await page.goto(
@@ -91,7 +82,6 @@ async function viewVideo(
 // export
 module.exports = {
     sleep,
-    getRandomNumber,
     clickAndWait,
     clickAndWaitIfPresent,
     viewVideo,

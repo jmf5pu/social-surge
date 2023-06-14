@@ -2,7 +2,7 @@
 var succeededCount = 0
 var failedCount = 0
 var todoCount = 0
-
+var totalViewTimeMs = 0
 document.addEventListener('DOMContentLoaded', () => {
     const closeButton = document.getElementById('close-button')
     const minimizeButton = document.getElementById('minimize-button')
@@ -12,10 +12,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const pageThreeNextButton = document.querySelector(
         '#page-three-to-one'
     )
-
     const pageOne = document.getElementById('page-one')
     const pageTwo = document.getElementById('page-two')
     const pageThree = document.getElementById('page-three')
+    const succeeded = document.getElementById('succeeded-count')
+    const todo = document.getElementById('to-do-count')
+    const failed = document.getElementById('failed-count')
+    const incrementSucceeded = document.getElementById('succeeded-fade')
+    const incrementFailed = document.getElementById('failed-fade')
+    const progressBar = document.getElementById('progress-bar-inner')
+    const currentProxy = document.getElementById('current-proxy')
+    const totalViewTime = document.getElementById('total-view-time')
+
+    const topRow = document.getElementById('top-row')
+    const middleRow = document.getElementById('middle-row')
+    const bottomRow = document.getElementById('bottom-row')
 
     // Add event listeners to handle button clicks
     closeButton.addEventListener('click', () => {
@@ -52,11 +63,13 @@ document.addEventListener('DOMContentLoaded', () => {
         todoCount = runArgs.viewCount
         succeededCount = 0
         failedCount = 0
-        document.getElementById('to-do-count').innerHTML = todoCount
-        document.getElementById('succeeded-count').innerHTML =
-            succeededCount
-        document.getElementById('failed-count').innerHTML = failedCount
-
+        todo.innerHTML = todoCount
+        succeeded.innerHTML = succeededCount
+        failed.innerHTML = failedCount
+        topRow.innerHTML = '&emsp;'
+        middleRow.innerHTML = '&emsp;'
+        bottomRow.innerHTML = '&emsp;'
+        progressBar.style.width = '0%'
         // send data to main.js
         submitForm(runArgs)
 
@@ -80,6 +93,9 @@ document.addEventListener('DOMContentLoaded', () => {
     pageThreeNextButton.addEventListener('click', (event) => {
         pageThree.style.display = 'none'
         pageOne.style.display = 'block'
+
+        // reset view time
+        totalViewTimeMs = 0
     })
 
     // exit app
@@ -90,29 +106,102 @@ document.addEventListener('DOMContentLoaded', () => {
             window.ipcRenderer.send('exit')
         })
 
-    window.ipcRenderer.on('individual-result', (event, viewResult) => {
-        if (viewResult) {
-            succeededCount += 1
-            document.getElementById('succeeded-count').innerHTML =
-                succeededCount
-            todoCount -= 1
-            document.getElementById('to-do-count').innerHTML = todoCount
+    window.ipcRenderer.on('individual-view-start', (event, proxy) => {
+        console.log(isWhitespace(topRow.innerHTML))
+        if (isWhitespace(topRow.innerHTML)) {
+            topRow.innerHTML = proxy
         } else {
-            failedCount += 1
-            document.getElementById('failed-count').innerHTML = failedCount
+            let topRowTemp = topRow.innerHTML
+            let middleRowTemp = middleRow.innerHTML
+
+            // clear bottom row
+            bottomRow.innerHTML = '&emsp;'
+
+            // move top row down and lighten
+            topRow.classList.add('animated-text-lighten')
+            topRow.addEventListener('animationend', () => {
+                topRow.classList.remove('animated-text-lighten')
+                topRow.innerHTML = proxy
+                middleRow.innerHTML = topRowTemp
+            })
+
+            // move middle row down and darken
+            middleRow.classList.add('animated-text-darken')
+            middleRow.addEventListener('animationend', () => {
+                middleRow.classList.remove('animated-text-darken')
+                bottomRow.innerHTML = middleRowTemp
+            })
         }
     })
+
+    window.ipcRenderer.on(
+        'individual-result',
+        (event, ipAddress, viewResult, viewTimeMs) => {
+            totalViewTimeMs += viewTimeMs
+
+            if (viewResult) {
+                // update success counter
+                succeededCount += 1
+                succeeded.innerHTML = succeededCount
+
+                // animation
+                incrementSucceeded.innerHTML = '+1'
+                incrementSucceeded.classList.add('fade-out')
+                setTimeout(() => {
+                    incrementSucceeded.innerHTML = ''
+                    incrementSucceeded.classList.remove('fade-out')
+                }, 1000) // Remove the 'fade-out' class after 1 second
+
+                // update todo counter
+                todoCount -= 1
+                todo.innerHTML = todoCount
+
+                // update progress bar
+                widthRatio = succeededCount / (succeededCount + todoCount)
+                progressBar.style.width = `${widthRatio * 100}%`
+            } else {
+                // update failure counter
+                failedCount += 1
+                failed.innerHTML = failedCount
+
+                // animation
+                incrementFailed.innerHTML = '+1'
+                incrementFailed.classList.add('fade-out')
+                setTimeout(() => {
+                    incrementFailed.innerHTML = ''
+                    incrementFailed.classList.remove('fade-out')
+                }, 1000)
+            }
+        }
+    )
 
     // go from page 2 to 3
     function pageTwoToThree() {
         pageTwo.style.display = 'none'
         pageThree.style.display = 'block'
+        totalViewTime.innerHTML = convertTime(totalViewTimeMs)
     }
+
     // form submission
     function submitForm(formData) {
         window.ipcRenderer.send('run-start', formData)
     }
 })
+
+// format time for third page TODO: fix this, total time is wrong (likely adding failed runs)
+function convertTime(totalViewTimeMs) {
+    var hours = Math.floor(totalViewTimeMs / 3600000) // 1 hour = 3600000 milliseconds
+    var minutes = Math.floor((totalViewTimeMs % 3600000) / 60000) // 1 minute = 60000 milliseconds
+    var seconds = Math.floor(((totalViewTimeMs % 3600000) % 60000) / 1000) // 1 second = 1000 milliseconds
+
+    var formattedTime =
+        hours + ' Hours, ' + minutes + ' Minutes, ' + seconds + ' Seconds'
+    return formattedTime
+}
+
+function isWhitespace(str) {
+    return /^\s*$/.test(str)
+}
 
 class RunInfo {
     constructor(

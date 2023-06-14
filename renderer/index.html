@@ -10,10 +10,11 @@
         <link rel="stylesheet" href="output.css" />
     </head>
     <body>
+        <!-- title bar -->
         <div class="titlebar-drag-region">
             <div class="titlebar">
                 <div id="titlebar-drag-region"></div>
-                <div class="title">ViewBoostPro</div>
+                <div class="title">Social Surge</div>
                 <div class="window-controls">
                     <div id="minimize-button" class="window-button">
                         <span>&minus;</span>
@@ -24,89 +25,159 @@
                 </div>
             </div>
         </div>
+        <!-- page 1 -->
         <div id="page-one">
             <div class="content-padding">
                 <div class="header-text">Start your run:</div>
                 <div class="page-contents">
-                    <form id="bot-input-form">
-                        <label for="search-string">Search phrase:</label>
-                        <input
-                            type="text"
-                            id="search-string"
-                            name="search-string"
-                        /><br />
-                        <label for="view-count">View count:</label>
-                        <input
-                            type="text"
-                            id="view-count"
-                            class="small-input"
-                        /><br />
-                        <label for="min-view-s">View duration:</label>
-                        <input
-                            type="text"
-                            id="min-view-s"
-                            class="second-input"
-                        />
-                        -
-                        <input
-                            type="text"
-                            id="max-view-s"
-                            class="second-input"
-                        />s
-                        <br />
-                        <label for="worker-count">Workers:</label>
-                        <input
-                            type="text"
-                            id="worker-count"
-                            class="small-input"
-                            value="1"
-                        /><br />
-                        <label for="proxy-list"
-                            >Proxies (IP:PORT, comma or newline
-                            separated)</label
-                        ><br />
-                        <div class="scrollbar">
-                            <textarea id="proxy-list" rows="5" cols="20">
-                            </textarea>
-                        </div>
-                        <br />
-                        <input
-                            type="button"
-                            value="Submit"
-                            id="form-submit-button"
-                        />
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div id="page-two">
-            <div class="content-padding">
-                <div class="header-text">Run in progress</div>
-                <div class="page-contents">
                     <div class="content-padding">
-                        To-do:
-                        <div id="to-do-count"></div>
-                        <br />
-                        Succeeded:
-                        <div id="succeeded-count"></div>
-                        <br />
-                        Failed:
-                        <div id="failed-count"></div>
-                        <br />
-                        <input
-                            type="button"
-                            value="Cancel"
-                            id="cancel-button"
-                        />
+                        <form id="bot-input-form">
+                            <label for="search-string"
+                                >Search phrase:</label
+                            >
+                            <input
+                                type="text"
+                                id="search-string"
+                                name="search-string"
+                            /><br />
+                            <label for="view-count">View count:</label>
+                            <input
+                                type="text"
+                                id="view-count"
+                                class="small-input"
+                            /><br />
+                            <label for="min-view-s">View duration:</label>
+                            <input
+                                type="text"
+                                id="min-view-s"
+                                class="second-input"
+                            />
+                            -
+                            <input
+                                type="text"
+                                id="max-view-s"
+                                class="second-input"
+                            />s
+                            <br />
+                            <label for="worker-count">Workers:</label>
+                            <input
+                                type="text"
+                                id="worker-count"
+                                class="small-input"
+                                value="1"
+                            /><br />
+                            <label for="proxy-list"
+                                >Proxies (IP:PORT, comma or newline
+                                separated)</label
+                            ><br />
+                            <div class="scrollbar">
+                                <textarea
+                                    id="proxy-list"
+                                    rows="5"
+                                    cols="20"
+                                >
+                                </textarea>
+                            </div>
+                            <br />
+                            <input
+                                type="button"
+                                value="Submit"
+                                id="form-submit-button"
+                            />
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- page 2 -->
+        <div id="page-two">
+            <div class="content-padding">
+                <div class="header-text">
+                    Run in progress
+                    <div id="loading-wheel" class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+                <div class="page-contents">
+                    <div class="flex-container-view-counts">
+                        <div class="left-result-column">
+                            <div class="result-column-inner">
+                                <p class="count-header">To-do</p>
+                                <p id="to-do-count" class="view-count"></p>
+                            </div>
+                        </div>
+                        <div class="middle-result-column">
+                            <div class="result-column-inner">
+                                <p class="count-header">Completed</p>
+                                <p
+                                    id="succeeded-count"
+                                    class="view-count"
+                                ></p>
+                                <p
+                                    id="succeeded-fade"
+                                    class="text-center"
+                                ></p>
+                            </div>
+                        </div>
+                        <div class="right-result-column">
+                            <div class="result-column-inner">
+                                <p class="count-header">Failed</p>
+                                <p
+                                    id="failed-count"
+                                    class="view-count"
+                                ></p>
+                                <p
+                                    id="failed-fade"
+                                    class="text-center"
+                                ></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-padding">
+                        <div class="flex-container-proxy-display">
+                            <div class="proxy-display-col-1">Trying:</div>
+                            <div class="proxy-display-col-2">
+                                <div
+                                    id="top-row"
+                                    class="dark-ip-address"
+                                ></div>
+                                <div
+                                    id="middle-row"
+                                    class="light-ip-address"
+                                ></div>
+                                <div
+                                    id="bottom-row"
+                                    class="dark-ip-address"
+                                ></div>
+                            </div>
+                            <div class="proxy-display-col-3">
+                                <input
+                                    type="button"
+                                    value="Cancel"
+                                    id="cancel-button"
+                                />
+                            </div>
+                        </div>
+                        <div id="progress-bar-outer">
+                            <div
+                                id="progress-bar-inner"
+                                style="width: 0%"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- page 3 -->
         <div id="page-three">
             <div class="content-padding">
                 <div class="header-text">Run Complete!</div>
                 <div class="page-contents">
                     <div class="content-padding">
+                        <div id="total-view-time"></div>
                         <input
                             type="button"
                             value="Kick off another run"

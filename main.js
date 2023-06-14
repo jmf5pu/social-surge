@@ -1,10 +1,8 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
-const { spawn, Pool, Worker, Thread } = require('threads')
-const { parseProxies } = require('./utils.js')
 const path = require('path')
-const isDev = true //process.env.NODE_ENV !== 'production'
+const isDev = false
 //const isMac = process.platform === 'darwin'
-const dimensions = [385, 475] // width, height
+const dimensions = [370, 370] // width, height
 const childProcessSpawn = require('child_process').spawn
 var currentProgress = -1
 var childProcess
@@ -13,9 +11,9 @@ var mainWindow
 // Create main window
 function createMainWindow() {
     mainWindow = new BrowserWindow({
-        title: 'ViewBoostPro',
+        title: 'Social Surge',
         width: isDev ? dimensions[0] + 500 : dimensions[0], // extend window for dev console
-        height: 475,
+        height: dimensions[1],
         frame: false,
         resizable: false,
         webPreferences: {
@@ -114,10 +112,10 @@ ipcMain.on('run-start', async (event, runInfo) => {
 
     const onData = (data) => {
         childOutput = data.toString()
-        console.log('Child process stdout:', childOutput)
+        console.log('[Child] ', childOutput)
 
         // Check if we have hit our desired number of views
-        if (childOutput.includes('complete')) {
+        if (childOutput.includes('all views completed')) {
             cleanupRun()
             childProcess.stdout.removeListener('data', onData) // Remove the event listener
             return
@@ -125,10 +123,24 @@ ipcMain.on('run-start', async (event, runInfo) => {
 
         // parse responses from child process
         dataArray = childOutput.split(' ')
-        ipAddress = dataArray[0].trim()
-        viewResult = dataArray[1].trim() === 'false' ? false : true
+        if (dataArray[0].trim() === 'started') {
+            mainWindow.webContents.send(
+                'individual-view-start',
+                dataArray[1]
+            )
+            return
+        } else if (dataArray[0].trim() === 'completed') {
+            ipAddress = dataArray[1].trim()
+            viewResult = dataArray[2].trim() === 'false' ? false : true
+            viewTimeMs = Number(dataArray[3].trim())
+        }
 
-        mainWindow.webContents.send('individual-result', viewResult)
+        mainWindow.webContents.send(
+            'individual-result',
+            ipAddress,
+            viewResult,
+            viewTimeMs
+        )
 
         // Update icon progress bar
         saveAndSetProgress(
@@ -140,6 +152,6 @@ ipcMain.on('run-start', async (event, runInfo) => {
 
     // Listen for data on stderr (errors)
     childProcess.stderr.on('data', (data) => {
-        console.error(`Child Process stderr: ${data}`)
+        console.error(`[Child Error] ${data}`)
     })
 })

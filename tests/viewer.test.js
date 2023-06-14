@@ -1,21 +1,5 @@
 const viewer = require('../viewbot/viewer.js')
 const { Page } = require('puppeteer')
-// getRandomNumber tests
-test('random number between two of the same number should be itself', () => {
-    jest.clearAllMocks()
-    const min = 1
-    const max = 1
-    expect(viewer.getRandomNumber(1, 1)).toBe(1)
-})
-
-test('random number should be between max and min parameters', () => {
-    jest.clearAllMocks()
-    const min = 1
-    const max = 10
-    const value = viewer.getRandomNumber(min, max)
-    expect(value).toBeGreaterThanOrEqual(min)
-    expect(value).toBeLessThanOrEqual(max)
-})
 
 // sleep tests
 test('sleep should set a timeout for the correct amount of milliseconds', () => {
