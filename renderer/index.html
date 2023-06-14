@@ -92,7 +92,15 @@
         <!-- page 2 -->
         <div id="page-two">
             <div class="content-padding">
-                <div class="header-text">Run in progress</div>
+                <div class="header-text">
+                    Run in progress
+                    <div id="loading-wheel" class="lds-ring">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
                 <div class="page-contents">
                     <div class="flex-container-view-counts">
                         <div class="left-result-column">
@@ -146,12 +154,11 @@
                                 ></div>
                             </div>
                             <div class="proxy-display-col-3">
-                                <div class="lds-ring">
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                    <div></div>
-                                </div>
+                                <input
+                                    type="button"
+                                    value="Cancel"
+                                    id="cancel-button"
+                                />
                             </div>
                         </div>
                         <div id="progress-bar-outer">
@@ -160,11 +167,6 @@
                                 style="width: 0%"
                             ></div>
                         </div>
-                        <input
-                            type="button"
-                            value="Cancel"
-                            id="cancel-button"
-                        />
                     </div>
                 </div>
             </div>

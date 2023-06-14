@@ -66,9 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
         todo.innerHTML = todoCount
         succeeded.innerHTML = succeededCount
         failed.innerHTML = failedCount
-        topRow.innerHTML = ''
-        middleRow.innerHTML = ''
-        bottomRow.innerHTML = ''
+        topRow.innerHTML = '&emsp;'
+        middleRow.innerHTML = '&emsp;'
+        bottomRow.innerHTML = '&emsp;'
+        progressBar.style.width = '0%'
         // send data to main.js
         submitForm(runArgs)
 
@@ -106,26 +107,31 @@ document.addEventListener('DOMContentLoaded', () => {
         })
 
     window.ipcRenderer.on('individual-view-start', (event, proxy) => {
-        let topRowTemp = topRow.innerHTML
-        let middleRowTemp = middleRow.innerHTML
-
-        // clear bottom row
-        bottomRow.innerHTML = ''
-
-        // move top row down and lighten
-        topRow.classList.add('animated-text-lighten')
-        topRow.addEventListener('animationend', () => {
-            topRow.classList.remove('animated-text-lighten')
+        console.log(isWhitespace(topRow.innerHTML))
+        if (isWhitespace(topRow.innerHTML)) {
             topRow.innerHTML = proxy
-            middleRow.innerHTML = topRowTemp
-        })
+        } else {
+            let topRowTemp = topRow.innerHTML
+            let middleRowTemp = middleRow.innerHTML
 
-        // move middle row down and darken
-        middleRow.classList.add('animated-text-darken')
-        middleRow.addEventListener('animationend', () => {
-            middleRow.classList.remove('animated-text-darken')
-            bottomRow.innerHTML = middleRowTemp
-        })
+            // clear bottom row
+            bottomRow.innerHTML = '&emsp;'
+
+            // move top row down and lighten
+            topRow.classList.add('animated-text-lighten')
+            topRow.addEventListener('animationend', () => {
+                topRow.classList.remove('animated-text-lighten')
+                topRow.innerHTML = proxy
+                middleRow.innerHTML = topRowTemp
+            })
+
+            // move middle row down and darken
+            middleRow.classList.add('animated-text-darken')
+            middleRow.addEventListener('animationend', () => {
+                middleRow.classList.remove('animated-text-darken')
+                bottomRow.innerHTML = middleRowTemp
+            })
+        }
     })
 
     window.ipcRenderer.on(
@@ -191,6 +197,10 @@ function convertTime(totalViewTimeMs) {
     var formattedTime =
         hours + ' Hours, ' + minutes + ' Minutes, ' + seconds + ' Seconds'
     return formattedTime
+}
+
+function isWhitespace(str) {
+    return /^\s*$/.test(str)
 }
 
 class RunInfo {

@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const path = require('path')
 const isDev = false
 //const isMac = process.platform === 'darwin'
-const dimensions = [385, 475] // width, height
+const dimensions = [370, 370] // width, height
 const childProcessSpawn = require('child_process').spawn
 var currentProgress = -1
 var childProcess
@@ -13,7 +13,7 @@ function createMainWindow() {
     mainWindow = new BrowserWindow({
         title: 'Social Surge',
         width: isDev ? dimensions[0] + 500 : dimensions[0], // extend window for dev console
-        height: 475,
+        height: dimensions[1],
         frame: false,
         resizable: false,
         webPreferences: {
