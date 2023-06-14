@@ -59,23 +59,25 @@ document.addEventListener('DOMContentLoaded', () => {
             (proxies = document.getElementById('proxy-list').value)
         )
 
-        // update fields on second screen
-        todoCount = runArgs.viewCount
-        succeededCount = 0
-        failedCount = 0
-        todo.innerHTML = todoCount
-        succeeded.innerHTML = succeededCount
-        failed.innerHTML = failedCount
-        topRow.innerHTML = '&emsp;'
-        middleRow.innerHTML = '&emsp;'
-        bottomRow.innerHTML = '&emsp;'
-        progressBar.style.width = '0%'
-        // send data to main.js
-        submitForm(runArgs)
+        if (validateForm(runArgs)) {
+            // update fields on second screen
+            todoCount = runArgs.viewCount
+            succeededCount = 0
+            failedCount = 0
+            todo.innerHTML = todoCount
+            succeeded.innerHTML = succeededCount
+            failed.innerHTML = failedCount
+            topRow.innerHTML = '&emsp;'
+            middleRow.innerHTML = '&emsp;'
+            bottomRow.innerHTML = '&emsp;'
+            progressBar.style.width = '0%'
+            // send data to main.js
+            submitForm(runArgs)
 
-        // go to next page
-        pageOne.style.display = 'none'
-        pageTwo.style.display = 'block'
+            // go to next page
+            pageOne.style.display = 'none'
+            pageTwo.style.display = 'block'
+        }
     })
 
     // page 2 -> 3 (run cancelled)
@@ -182,6 +184,42 @@ document.addEventListener('DOMContentLoaded', () => {
         totalViewTime.innerHTML = convertTime(totalViewTimeMs)
     }
 
+    // validate form fields
+    function validateForm(runArgs) {
+        formIsValid = true
+
+        // must have a search string
+        if (isWhitespace(runArgs.searchString)) {
+            formIsValid = false
+        }
+
+        // must request at least 1 view
+        if (isNaN(viewCount) || viewCount <= 0) {
+            formIsValid = false
+        }
+
+        // min view s must be less than max view s, and must be greater than 0
+        if (
+            isNaN(minViewS) ||
+            isNaN(maxViewS) ||
+            minViewS > maxViewS ||
+            maxViewS <= 0 ||
+            minViewS <= 0
+        ) {
+            formIsValid = false
+        }
+
+        // proxies must be only numbers and punctuation, must be commas or newline separated
+        if (
+            !isNumbersAndPunctuation(runArgs.proxies) ||
+            (!runArgs.proxies.includes(',') &&
+                !runArgs.proxies.includes('\n'))
+        ) {
+            formIsValid = false
+        }
+        return formIsValid
+    }
+
     // form submission
     function submitForm(formData) {
         window.ipcRenderer.send('run-start', formData)
@@ -199,10 +237,15 @@ function convertTime(totalViewTimeMs) {
     return formattedTime
 }
 
+// returns if string is whitespace only
 function isWhitespace(str) {
     return /^\s*$/.test(str)
 }
 
+// returns if a string only contains numbers, punctuation, and whitespace
+function isNumbersAndPunctuation(str) {
+    return /^[0-9\p{P}\s]+$/u.test(str)
+}
 class RunInfo {
     constructor(
         searchString,
@@ -219,5 +262,4 @@ class RunInfo {
         this.workerCount = workerCount
         this.proxies = proxies
     }
-    // TODO: validate fields here
 }
