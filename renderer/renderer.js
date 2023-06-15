@@ -4,6 +4,14 @@ var failedCount = 0
 var todoCount = 0
 var totalViewTimeMs = 0
 document.addEventListener('DOMContentLoaded', () => {
+    // form fields:
+    const searchStringInput = document.getElementById('search-string')
+    const viewCountInput = document.getElementById('view-count')
+    const minViewSInput = document.getElementById('min-view-s')
+    const maxViewSInput = document.getElementById('max-view-s')
+    const workerCountInput = document.getElementById('worker-count')
+    const proxyInput = document.getElementById('proxy-list')
+
     const closeButton = document.getElementById('close-button')
     const minimizeButton = document.getElementById('minimize-button')
     const mainResponse = document.querySelector('#main-response')
@@ -41,22 +49,21 @@ document.addEventListener('DOMContentLoaded', () => {
     submitFormButton.addEventListener('click', (event) => {
         event.stopPropagation()
 
+        // remove any red borders on resubmission
+        searchStringInput.classList.remove('red-border')
+        viewCountInput.classList.remove('red-border')
+        minViewSInput.classList.remove('red-border')
+        maxViewSInput.classList.remove('red-border')
+        workerCountInput.classList.remove('red-border')
+        proxyInput.classList.remove('red-border')
+
         let runArgs = new RunInfo(
-            (searchString =
-                document.getElementById('search-string').value),
-            (viewCount = parseInt(
-                document.getElementById('view-count').value
-            )),
-            (minViewS = parseInt(
-                document.getElementById('min-view-s').value
-            )),
-            (maxViewS = parseInt(
-                document.getElementById('max-view-s').value
-            )),
-            (workerCount = parseInt(
-                document.getElementById('worker-count').value
-            )),
-            (proxies = document.getElementById('proxy-list').value)
+            (searchString = searchStringInput.value),
+            (viewCount = parseInt(viewCountInput.value)),
+            (minViewS = parseInt(minViewSInput.value)),
+            (maxViewS = parseInt(maxViewSInput.value)),
+            (workerCount = parseInt(workerCountInput.value)),
+            (proxies = proxyInput.value)
         )
 
         if (validateForm(runArgs)) {
@@ -190,22 +197,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // must have a search string
         if (isWhitespace(runArgs.searchString)) {
+            searchStringInput.classList.add('red-border')
             formIsValid = false
         }
 
         // must request at least 1 view
         if (isNaN(viewCount) || viewCount <= 0) {
+            viewCountInput.classList.add('red-border')
             formIsValid = false
         }
 
         // min view s must be less than max view s, and must be greater than 0
-        if (
-            isNaN(minViewS) ||
-            isNaN(maxViewS) ||
-            minViewS > maxViewS ||
-            maxViewS <= 0 ||
-            minViewS <= 0
-        ) {
+        if (isNaN(minViewS) || minViewS <= 0) {
+            minViewSInput.classList.add('red-border')
+            formIsValid = false
+        }
+        if (isNaN(maxViewS) || maxViewS <= 0) {
+            maxViewSInput.classList.add('red-border')
+            formIsValid = false
+        }
+
+        if (minViewS > maxViewS) {
+            minViewSInput.classList.add('red-border')
+            maxViewSInput.classList.add('red-border')
             formIsValid = false
         }
 
@@ -215,6 +229,7 @@ document.addEventListener('DOMContentLoaded', () => {
             (!runArgs.proxies.includes(',') &&
                 !runArgs.proxies.includes('\n'))
         ) {
+            proxyInput.classList.add('red-border')
             formIsValid = false
         }
         return formIsValid

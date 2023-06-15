@@ -71,6 +71,10 @@ textarea {
     @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-800 rounded-lg overflow-hidden;
 }
 
+.red-border {
+    @apply ring-1 ring-red-500 border-red-500;
+}
+
 .header-text {
     @apply text-xl rounded-md bg-gray-800 p-2 mt-1 mx-auto;
 }
