@@ -57,15 +57,13 @@
                             <br />
                             <label for="worker-count">Workers:</label>
                             <input
-                                type="text"
                                 id="worker-count"
                                 class="small-input"
+                                type="number"
+                                min="1"
                                 value="1"
                             /><br />
-                            <label for="proxy-list"
-                                >Proxies (IP:PORT, comma or newline
-                                separated)</label
-                            ><br />
+                            <label for="proxy-list">Proxies</label><br />
                             <div class="scrollbar">
                                 <textarea
                                     id="proxy-list"
@@ -74,7 +72,6 @@
                                 >
                                 </textarea>
                             </div>
-                            <br />
                             <input
                                 type="button"
                                 value="Submit"

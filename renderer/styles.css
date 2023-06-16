@@ -7,11 +7,20 @@ body {
 }
 
 input {
-    @apply bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 px-3 py-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
+    @apply text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 p-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
 }
 
 textarea {
-    @apply bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 px-3 py-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 w-full resize-none;
+    @apply text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 p-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 w-full h-[75px] resize-none;
+}
+
+#form-submit-button {
+    @apply focus:ring-green-300 focus:border-green-300;
+}
+
+#form-submit-button:hover {
+    @apply focus:ring-green-300 focus:border-green-300;
+    background-color: #047857;
 }
 
 .titlebar-drag-region {
@@ -60,7 +69,7 @@ textarea {
 }
 
 .small-input {
-    @apply w-50;
+    @apply w-[100px];
 }
 
 .second-input {
