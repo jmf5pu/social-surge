@@ -6,12 +6,37 @@ body {
     @apply bg-gray-900 text-white;
 }
 
+[type='button'] {
+    @apply p-1 text-base;
+}
+
 input {
-    @apply text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 p-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
+    @apply text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
 }
 
 textarea {
-    @apply text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 p-1 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 w-full h-[75px] resize-none;
+    @apply text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500 w-full h-[75px] resize-none;
+}
+
+#search-string {
+    @apply w-full;
+}
+
+#view-count {
+    @apply w-[px];
+}
+.form-input-padding {
+    @apply pb-2;
+}
+.form-inline-div {
+    @apply flex pb-1;
+}
+.inline-input-left {
+    @apply w-1/3;
+}
+
+.inline-input-right {
+    @apply w-2/3;
 }
 
 #form-submit-button {
@@ -69,11 +94,11 @@ textarea {
 }
 
 .small-input {
-    @apply w-[100px];
+    @apply w-[40px];
 }
 
-.second-input {
-    @apply w-50 table-cell;
+.duration-input {
+    @apply w-[40px] table-cell;
 }
 
 .scrollbar {
@@ -85,7 +110,7 @@ textarea {
 }
 
 .header-text {
-    @apply text-xl rounded-md bg-gray-800 p-2 mt-1 mx-auto;
+    @apply text-xl rounded-md bg-gray-800 p-2 mt-0.5 mx-auto;
 }
 .page-contents {
     @apply text-base rounded-md bg-gray-800 mt-2 mx-auto;
@@ -157,6 +182,7 @@ textarea {
 }
 
 #bot-input-form {
+    @apply w-full;
     display: table;
 }
 
