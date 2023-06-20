@@ -94,17 +94,21 @@ function cleanupRun() {
     process.env.MINVIEWS = null
     process.env.MAXVIEWS = null
     process.env.WORKERCOUNT = null
+    process.env.CHROMIUMPATH = null
     process.env.PROXIES = null
     process.env.SUCCESSES = 0
 }
 
 // stat run and setup stdout listeners for child_process thread
 ipcMain.on('run-start', async (event, runInfo) => {
+    console.log(`recieved: ${runInfo.chromiumPath}`)
     process.env.SEARCHSTRING = String(runInfo.searchString)
     process.env.VIEWCOUNT = Number(runInfo.viewCount)
     process.env.MINVIEWS = Number(runInfo.minViewS)
     process.env.MAXVIEWS = Number(runInfo.maxViewS)
     process.env.WORKERCOUNT = Number(runInfo.workerCount)
+    process.env.CHROMIUMPATH = String(runInfo.chromiumPath)
+    console.log(`setting: ${process.env.CHROMIUMPATH}`)
     process.env.PROXIES = runInfo.proxies
     process.env.SUCCESSES = 0
     currentProgress = 0
