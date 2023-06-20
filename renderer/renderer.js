@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const maxViewSInput = document.getElementById('max-view-s')
     const workerCountInput = document.getElementById('worker-count')
     const chromiumPathInput = document.getElementById('file-input')
+    const chromiumPathInputLabel =
+        document.getElementById('file-input-label')
     const proxyInput = document.getElementById('proxy-list')
 
     const closeButton = document.getElementById('close-button')
@@ -44,6 +46,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     minimizeButton.addEventListener('click', () => {
         window.ipcRenderer.send('minimize-window')
+    })
+
+    // listening for file selection on page 1
+    chromiumPathInput.addEventListener('change', () => {
+        console.log(chromiumPathInput.files[0].path)
+        chromiumPathInputLabel.innerHTML = chromiumPathInput.files[0].path
+            .split('\\')
+            .pop()
     })
 
     // page 1 -> 2 (kick off run)
