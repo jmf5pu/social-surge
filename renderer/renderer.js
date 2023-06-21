@@ -58,8 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // page 1 -> 2 (kick off run)
     submitFormButton.addEventListener('click', (event) => {
-        event.stopPropagation()
-
         // remove any red borders on resubmission
         searchStringInput.classList.remove('red-border')
         viewCountInput.classList.remove('red-border')
@@ -84,8 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
             })()),
             (proxies = proxyInput.value)
         )
+        
+        // workerCount must be 1 or greater, if not, reset to default
+        if (runArgs.workerCount <= 0){
+            runArgs.workerCount = 1
+            workerCountInput.value = '1'
+        }
 
-        console.log(runArgs)
         if (validateForm(runArgs)) {
             // update fields on second screen
             todoCount = runArgs.viewCount
@@ -232,6 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
             minViewSInput.classList.add('red-border')
             formIsValid = false
         }
+
         if (isNaN(runArgs.maxViewS) || runArgs.maxViewS <= 0) {
             maxViewSInput.classList.add('red-border')
             formIsValid = false
@@ -244,11 +248,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!runArgs.chromiumPath) {
-            console.log('must specify a chromium path')
-            chromiumPathInput.classList.add('red-border')
+            console.log('must specify chromium path')
+            chromiumPathInputLabel.classList.add('red-border')
             formIsValid = false
         }
-
+        
         // proxies must be only numbers and punctuation, must be commas or newline separated
         if (
             !isNumbersAndPunctuation(runArgs.proxies) ||

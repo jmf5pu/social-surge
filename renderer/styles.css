@@ -7,11 +7,11 @@ body {
 }
 
 [type='button'] {
-    @apply p-1 text-base;
+    @apply p-1 text-base cursor-pointer;
 }
 
 input {
-    @apply text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
+    @apply text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 rounded-sm;
 }
 
 textarea {
@@ -19,9 +19,8 @@ textarea {
 }
 
 #search-string {
-    @apply w-full;
+    @apply p-1 w-full focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
 }
-
 .form-input-padding {
     @apply pb-2;
 }
@@ -42,13 +41,33 @@ textarea {
 .inline-input-75 {
     @apply flex justify-center w-3/5;
 }
-#form-submit-button {
-    @apply focus:ring-green-300 focus:border-green-300;
+
+#page-one-bottom-buttons {
+    @apply flex;
+}
+
+#form-submit-button{
+    @apply text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 rounded-sm;
 }
 
 #form-submit-button:hover {
-    @apply focus:ring-green-300 focus:border-green-300;
-    background-color: #047857;
+    @apply bg-green-800;
+}
+
+#form-submit-button:active{
+    @apply ring-green-300 border-green-300;
+}
+
+#form-reset-button{
+    @apply text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 rounded-sm;
+}
+
+#form-reset-button:hover {
+    @apply bg-red-800;
+}
+
+#form-reset-button:active{
+    @apply ring-red-300 border-red-300;
 }
 
 .titlebar-drag-region {
@@ -97,11 +116,11 @@ textarea {
 }
 
 .small-input {
-    @apply w-[40px] p-1;
+    @apply w-[40px] p-1 focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
 }
 
 .duration-input {
-    @apply w-[40px] table-cell;
+    @apply w-[40px] table-cell focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
 }
 
 #file-input {
