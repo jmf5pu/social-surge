@@ -82,9 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
             })()),
             (proxies = proxyInput.value)
         )
-        
+
         // workerCount must be 1 or greater, if not, reset to default
-        if (runArgs.workerCount <= 0){
+        if (runArgs.workerCount <= 0) {
             runArgs.workerCount = 1
             workerCountInput.value = '1'
         }
@@ -252,7 +252,7 @@ document.addEventListener('DOMContentLoaded', () => {
             chromiumPathInputLabel.classList.add('red-border')
             formIsValid = false
         }
-        
+
         // proxies must be only numbers and punctuation, must be commas or newline separated
         if (
             !isNumbersAndPunctuation(runArgs.proxies) ||
