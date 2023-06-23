@@ -36,7 +36,7 @@ textarea {
 }
 
 .inline-input-25 {
-    @apply grid grid-flow-col justify-center w-2/5;
+    @apply grid grid-flow-col justify-center w-2/5 relative;
 }
 
 .inline-input-75 {
@@ -48,11 +48,11 @@ textarea {
 }
 
 #form-submit-button {
-    @apply text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 rounded-sm;
+    @apply text-base bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-sm;
 }
 
 #form-submit-button:hover {
-    @apply bg-green-800;
+    @apply bg-green-500;
 }
 
 #form-submit-button:active {
@@ -60,11 +60,11 @@ textarea {
 }
 
 #form-reset-button {
-    @apply text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 rounded-sm;
+    @apply mr-2 text-base bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-sm;
 }
 
 #form-reset-button:hover {
-    @apply bg-red-800;
+    @apply bg-red-500;
 }
 
 #form-reset-button:active {
@@ -128,7 +128,7 @@ textarea {
     @apply hidden;
 }
 #file-input-label {
-    @apply p-1 text-center w-[150px] resize-none hover:ring-1 hover:ring-blue-500 hover:border-blue-500 cursor-pointer text-sm bg-gray-800 text-gray-300 placeholder-gray-500 border border-gray-700 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
+    @apply p-1 text-center w-[150px] resize-none hover:ring-1 hover:ring-blue-500 hover:border-blue-500 cursor-pointer text-sm bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-sm focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
 }
 /* removes default "choose file" button */
 ::file-selector-button {
@@ -150,7 +150,14 @@ textarea {
 }
 
 #worker-count-info {
-    @apply hidden absolute bg-gray-900 text-white text-sm p-2 rounded-md w-[130px] mt-[2px] z-10;
+    @apply hidden absolute bg-gray-900 text-white text-sm p-2 rounded-md w-[200px] mt-[2px] z-10;
+}
+
+.proxy-input-parent {
+    @apply relative;
+}
+#proxy-info {
+    @apply absolute z-10 mt-[2px] hidden w-[275px] rounded-md bg-gray-900 p-2 text-sm text-white;
 }
 
 #search-string:hover + #search-string-info {
@@ -175,11 +182,13 @@ textarea {
     @apply block;
     top: 100%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-30%);
 }
-
-.scrollbar {
-    @apply scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-800 rounded-lg overflow-hidden;
+#proxy-list:hover + #proxy-info {
+    @apply block;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-38%) translateY(-250%);
 }
 
 .red-border {
@@ -190,7 +199,7 @@ textarea {
     @apply p-1 text-xl rounded-md bg-gray-800 mx-auto;
 }
 .page-contents {
-    @apply text-base rounded-md bg-gray-800 mt-[10px] mx-auto;
+    @apply text-base rounded-md bg-gray-800 mt-[6px] mx-auto;
 }
 
 /* page 2 stuff */
@@ -242,8 +251,7 @@ textarea {
     @apply focus:ring-red-300 focus:border-red-300;
 }
 #cancel-button:hover {
-    @apply focus:ring-red-300 focus:border-red-300;
-    background-color: #ff0000;
+    @apply focus:ring-red-300 focus:border-red-300 bg-red-500;
 }
 
 /*   */

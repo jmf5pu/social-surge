@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeButton = document.getElementById('close-button')
     const minimizeButton = document.getElementById('minimize-button')
     const mainResponse = document.querySelector('#main-response')
+    const resetFormButton = document.querySelector('#form-reset-button')
     const submitFormButton = document.querySelector('#form-submit-button')
     const cancelButton = document.querySelector('#cancel-button')
     const pageThreeNextButton = document.querySelector(
@@ -56,16 +57,23 @@ document.addEventListener('DOMContentLoaded', () => {
             .pop()
     })
 
+    // reset form
+    resetFormButton.addEventListener('click', (event) => {
+        searchStringInput.value = ''
+        viewCountInput.value = ''
+        minViewSInput.value = ''
+        maxViewSInput.value = ''
+        workerCountInput.value = '1'
+        chromiumPathInputLabel.innerHTML = 'Select Chromium Path'
+        chromiumPathInput.value = ''
+        proxyInput.value = ''
+        removeInputRedBorders()
+    })
+
     // page 1 -> 2 (kick off run)
     submitFormButton.addEventListener('click', (event) => {
         // remove any red borders on resubmission
-        searchStringInput.classList.remove('red-border')
-        viewCountInput.classList.remove('red-border')
-        minViewSInput.classList.remove('red-border')
-        maxViewSInput.classList.remove('red-border')
-        workerCountInput.classList.remove('red-border')
-        chromiumPathInput.classList.remove('red-border')
-        proxyInput.classList.remove('red-border')
+        removeInputRedBorders()
 
         let runArgs = new RunInfo(
             (searchString = searchStringInput.value),
@@ -263,6 +271,16 @@ document.addEventListener('DOMContentLoaded', () => {
             formIsValid = false
         }
         return formIsValid
+    }
+
+    function removeInputRedBorders() {
+        searchStringInput.classList.remove('red-border')
+        viewCountInput.classList.remove('red-border')
+        minViewSInput.classList.remove('red-border')
+        maxViewSInput.classList.remove('red-border')
+        workerCountInput.classList.remove('red-border')
+        chromiumPathInputLabel.classList.remove('red-border')
+        proxyInput.classList.remove('red-border')
     }
 
     // form submission

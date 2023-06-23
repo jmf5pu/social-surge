@@ -87,26 +87,32 @@
                                         value="1"
                                     />
                                     <div id="worker-count-info">
-                                        hello<!-- Enter the number of parallel chromium instances -->
+                                        Enter the number of parallel
+                                        chromium instances
                                     </div>
                                 </div>
                                 <div class="inline-input-75">
                                     <label
                                         for="file-input"
                                         id="file-input-label"
-                                        >Select Chromium Path</label
+                                        >Select chrome.exe</label
                                     >
                                     <input id="file-input" type="file" />
                                 </div>
                             </div>
-                            <label for="proxy-list">Proxies</label><br />
-                            <div class="scrollbar">
+                            <div class="proxy-input-parent">
+                                <label for="proxy-list">Proxies</label>
                                 <textarea
                                     id="proxy-list"
                                     rows="5"
                                     cols="20"
                                 ></textarea>
+                                <div id="proxy-info">
+                                    Enter proxies in IP:PORT format, comma
+                                    or newline separated
+                                </div>
                             </div>
+
                             <div id="page-one-bottom-buttons">
                                 <input
                                     type="button"
