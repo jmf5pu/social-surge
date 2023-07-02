@@ -21,9 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetFormButton = document.querySelector('#form-reset-button')
     const submitFormButton = document.querySelector('#form-submit-button')
     const cancelButton = document.querySelector('#cancel-button')
-    const pageThreeNextButton = document.querySelector(
-        '#page-three-to-one'
-    )
+    const pageThreeNextButton = document.querySelector('#new-run-button')
     const pageOne = document.getElementById('page-one')
     const pageTwo = document.getElementById('page-two')
     const pageThree = document.getElementById('page-three')
@@ -140,7 +138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // exit app
     document
-        .getElementById('exit-btn')
+        .getElementById('exit-button')
         .addEventListener('click', (event) => {
             event.preventDefault()
             window.ipcRenderer.send('exit')

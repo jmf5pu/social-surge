@@ -7,7 +7,7 @@ body {
 }
 
 [type='button'] {
-    @apply p-1 text-base cursor-pointer;
+    @apply p-1 text-white text-base cursor-pointer;
 }
 
 input {
@@ -48,7 +48,7 @@ textarea {
 }
 
 #form-submit-button {
-    @apply text-base bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-sm;
+    @apply text-base bg-gray-800 placeholder-gray-500 border border-gray-700 rounded-sm;
 }
 
 #form-submit-button:hover {
@@ -60,7 +60,7 @@ textarea {
 }
 
 #form-reset-button {
-    @apply mr-2 text-base bg-gray-800 text-white placeholder-gray-500 border border-gray-700 rounded-sm;
+    @apply mr-2 text-base bg-gray-800 placeholder-gray-500 border border-gray-700 rounded-sm;
 }
 
 #form-reset-button:hover {
@@ -248,7 +248,7 @@ textarea {
 }
 
 #cancel-button {
-    @apply text-white focus:ring-red-300 focus:border-red-300;
+    @apply focus:ring-red-300 focus:border-red-300;
 }
 #cancel-button:hover {
     @apply focus:ring-red-300 focus:border-red-300 bg-red-500;
@@ -369,4 +369,59 @@ textarea {
     100% {
         transform: rotate(360deg);
     }
+}
+
+/* 3rd page stuff */
+.page-3-pie-chart {
+    @apply rounded-md mt-[6px] mx-auto;
+    background-color: red; /* For browsers that do not support gradients */
+    background-image: conic-gradient(
+        green 0%,
+        green 15%,
+        red 15%,
+        red 100%
+    );
+    transform: rotate(180deg);
+}
+
+.page-3-content {
+    @apply p-2 text-base text-center rounded-md bg-gray-800;
+    /* reversing rotation in parent div */
+    transform: rotate(180deg);
+}
+
+.result-label {
+    @apply font-bold mb-1;
+}
+
+.page-3-result {
+    @apply p-1 bg-black rounded-md;
+}
+
+.page-3-buttons {
+    @apply mt-2;
+}
+
+#exit-button {
+    @apply mr-2 text-base bg-gray-800 placeholder-gray-500 border border-gray-700 rounded-sm;
+}
+
+#exit-button:hover {
+    @apply bg-red-500;
+}
+
+#exit-button:active {
+    @apply ring-red-300 border-red-300;
+}
+
+#new-run-button {
+    @apply mr-2 text-base bg-gray-800 placeholder-gray-500 border border-gray-700 rounded-sm;
+}
+
+#new-run-button:hover {
+    @apply bg-green-500;
+}
+
+#new-run-button:active {
+    @apply ring-green-300 border-green-300;
 }
