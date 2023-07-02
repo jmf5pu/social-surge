@@ -10,11 +10,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const minViewSInput = document.getElementById('min-view-s')
     const maxViewSInput = document.getElementById('max-view-s')
     const workerCountInput = document.getElementById('worker-count')
+    const chromiumPathInput = document.getElementById('file-input')
+    const chromiumPathInputLabel =
+        document.getElementById('file-input-label')
     const proxyInput = document.getElementById('proxy-list')
 
     const closeButton = document.getElementById('close-button')
     const minimizeButton = document.getElementById('minimize-button')
     const mainResponse = document.querySelector('#main-response')
+    const resetFormButton = document.querySelector('#form-reset-button')
     const submitFormButton = document.querySelector('#form-submit-button')
     const cancelButton = document.querySelector('#cancel-button')
     const pageThreeNextButton = document.querySelector(
@@ -45,17 +49,31 @@ document.addEventListener('DOMContentLoaded', () => {
         window.ipcRenderer.send('minimize-window')
     })
 
+    // listening for file selection on page 1
+    chromiumPathInput.addEventListener('change', () => {
+        console.log(chromiumPathInput.files[0].path)
+        chromiumPathInputLabel.innerHTML = chromiumPathInput.files[0].path
+            .split('\\')
+            .pop()
+    })
+
+    // reset form
+    resetFormButton.addEventListener('click', (event) => {
+        searchStringInput.value = ''
+        viewCountInput.value = ''
+        minViewSInput.value = ''
+        maxViewSInput.value = ''
+        workerCountInput.value = '1'
+        chromiumPathInputLabel.innerHTML = 'Select Chromium Path'
+        chromiumPathInput.value = ''
+        proxyInput.value = ''
+        removeInputRedBorders()
+    })
+
     // page 1 -> 2 (kick off run)
     submitFormButton.addEventListener('click', (event) => {
-        event.stopPropagation()
-
         // remove any red borders on resubmission
-        searchStringInput.classList.remove('red-border')
-        viewCountInput.classList.remove('red-border')
-        minViewSInput.classList.remove('red-border')
-        maxViewSInput.classList.remove('red-border')
-        workerCountInput.classList.remove('red-border')
-        proxyInput.classList.remove('red-border')
+        removeInputRedBorders()
 
         let runArgs = new RunInfo(
             (searchString = searchStringInput.value),
@@ -63,8 +81,21 @@ document.addEventListener('DOMContentLoaded', () => {
             (minViewS = parseInt(minViewSInput.value)),
             (maxViewS = parseInt(maxViewSInput.value)),
             (workerCount = parseInt(workerCountInput.value)),
+            (chromiumPath = (() => {
+                try {
+                    return chromiumPathInput.files[0].path
+                } catch (error) {
+                    return null
+                }
+            })()),
             (proxies = proxyInput.value)
         )
+
+        // workerCount must be 1 or greater, if not, reset to default
+        if (runArgs.workerCount <= 0) {
+            runArgs.workerCount = 1
+            workerCountInput.value = '1'
+        }
 
         if (validateForm(runArgs)) {
             // update fields on second screen
@@ -202,24 +233,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // must request at least 1 view
-        if (isNaN(viewCount) || viewCount <= 0) {
+        if (isNaN(runArgs.viewCount) || runArgs.viewCount <= 0) {
             viewCountInput.classList.add('red-border')
             formIsValid = false
         }
 
         // min view s must be less than max view s, and must be greater than 0
-        if (isNaN(minViewS) || minViewS <= 0) {
+        if (isNaN(runArgs.minViewS) || runArgs.minViewS <= 0) {
             minViewSInput.classList.add('red-border')
             formIsValid = false
         }
-        if (isNaN(maxViewS) || maxViewS <= 0) {
+
+        if (isNaN(runArgs.maxViewS) || runArgs.maxViewS <= 0) {
             maxViewSInput.classList.add('red-border')
             formIsValid = false
         }
 
-        if (minViewS > maxViewS) {
+        if (runArgs.minViewS > runArgs.maxViewS) {
             minViewSInput.classList.add('red-border')
             maxViewSInput.classList.add('red-border')
+            formIsValid = false
+        }
+
+        if (!runArgs.chromiumPath) {
+            console.log('must specify chromium path')
+            chromiumPathInputLabel.classList.add('red-border')
             formIsValid = false
         }
 
@@ -233,6 +271,16 @@ document.addEventListener('DOMContentLoaded', () => {
             formIsValid = false
         }
         return formIsValid
+    }
+
+    function removeInputRedBorders() {
+        searchStringInput.classList.remove('red-border')
+        viewCountInput.classList.remove('red-border')
+        minViewSInput.classList.remove('red-border')
+        maxViewSInput.classList.remove('red-border')
+        workerCountInput.classList.remove('red-border')
+        chromiumPathInputLabel.classList.remove('red-border')
+        proxyInput.classList.remove('red-border')
     }
 
     // form submission
@@ -268,6 +316,7 @@ class RunInfo {
         minViewS,
         maxViewS,
         workerCount,
+        chromiumPath,
         proxies
     ) {
         this.searchString = searchString
@@ -275,6 +324,7 @@ class RunInfo {
         this.minViewS = minViewS
         this.maxViewS = maxViewS
         this.workerCount = workerCount
+        this.chromiumPath = chromiumPath
         this.proxies = proxies
     }
 }

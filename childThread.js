@@ -6,6 +6,7 @@ const viewCount = Number(process.env.VIEWCOUNT)
 const minViewS = Number(process.env.MINVIEWS)
 const maxViewS = Number(process.env.MAXVIEWS)
 const workerCount = Number(process.env.WORKERCOUNT)
+const chromiumPath = String(process.env.CHROMIUMPATH)
 const proxies = process.env.PROXIES.split(/\r?\n/)
 var successes = 0
 
@@ -42,7 +43,7 @@ async function main(event) {
             maxViewS,
             proxy,
             viewTimeMs,
-            'C:/Users/Justin/.cache/puppeteer/chrome/win64-1056772/chrome-win/chrome.exe' // TODO: figure out what to do with this param
+            chromiumPath
         )
 
         // process run results

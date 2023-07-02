@@ -28,7 +28,7 @@
         <!-- page 1 -->
         <div id="page-one">
             <div class="content-padding">
-                <div class="header-text">Start your run:</div>
+                <div class="header-text">Start your run &#x1F447;</div>
                 <div class="page-contents">
                     <div class="content-padding">
                         <form id="bot-input-form">
@@ -37,17 +37,25 @@
                                     >Search phrase:</label
                                 >
                                 <input type="text" id="search-string" />
+                                <div id="search-string-info">
+                                    Enter the phrase that returns the
+                                    target video as the first result on
+                                    youtube search
+                                </div>
                             </div>
                             <div class="form-inline-div">
-                                <div class="inline-input-left">
+                                <div class="inline-input-33">
                                     <label for="view-count">Count:</label>
                                     <input
                                         type="text"
                                         id="view-count"
                                         class="small-input"
                                     />
+                                    <div id="view-count-info">
+                                        Enter the view count
+                                    </div>
                                 </div>
-                                <div class="inline-input-right">
+                                <div class="inline-input-66">
                                     <label for="min-view-s"
                                         >Duration:</label
                                     >
@@ -62,32 +70,61 @@
                                         id="max-view-s"
                                         class="duration-input"
                                     />s
+                                    <div id="duration-info">
+                                        Enter the view duration
+                                    </div>
                                 </div>
                             </div>
-                            <div class="form-input-padding">
-                                <label for="worker-count">Workers:</label>
-                                <input
-                                    id="worker-count"
-                                    class="small-input"
-                                    type="number"
-                                    min="1"
-                                    value="1"
-                                />
+                            <div class="form-inline-div">
+                                <div class="inline-input-25">
+                                    <label for="worker-count"
+                                        >Workers:</label
+                                    >
+                                    <input
+                                        id="worker-count"
+                                        class="small-input"
+                                        type="text"
+                                        value="1"
+                                    />
+                                    <div id="worker-count-info">
+                                        Enter the number of parallel
+                                        chromium instances
+                                    </div>
+                                </div>
+                                <div class="inline-input-75">
+                                    <label
+                                        for="file-input"
+                                        id="file-input-label"
+                                        >Select chrome.exe</label
+                                    >
+                                    <input id="file-input" type="file" />
+                                </div>
                             </div>
-                            <label for="proxy-list">Proxies</label><br />
-                            <div class="scrollbar">
+                            <div class="proxy-input-parent">
+                                <label for="proxy-list">Proxies</label>
                                 <textarea
                                     id="proxy-list"
                                     rows="5"
                                     cols="20"
-                                >
-                                </textarea>
+                                ></textarea>
+                                <div id="proxy-info">
+                                    Enter proxies in IP:PORT format, comma
+                                    or newline separated
+                                </div>
                             </div>
-                            <input
-                                type="button"
-                                value="Submit"
-                                id="form-submit-button"
-                            />
+
+                            <div id="page-one-bottom-buttons">
+                                <input
+                                    type="button"
+                                    value="Reset &#x1F643;"
+                                    id="form-reset-button"
+                                />
+                                <input
+                                    type="button"
+                                    value="Submit &#x2705;"
+                                    id="form-submit-button"
+                                />
+                            </div>
                         </form>
                     </div>
                 </div>
