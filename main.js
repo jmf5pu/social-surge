@@ -1,12 +1,24 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const path = require('path')
-const isDev = false
+const isDev = true
 //const isMac = process.platform === 'darwin'
 const dimensions = [370, 370] // width, height
 const childProcessSpawn = require('child_process').spawn
 var currentProgress = -1
 var childProcess
 var mainWindow
+
+// TODO: remove this:
+const Store = require('electron-store');
+
+// Create a new instance of electron-store
+const store = new Store();
+
+ipcMain.on('electron-store-get-data', (event) => {
+  const data = store.get('myData');
+  event.returnValue = data;
+});
+//
 
 // Create main window
 function createMainWindow() {
@@ -18,7 +30,7 @@ function createMainWindow() {
         resizable: false,
         webPreferences: {
             contextIsolation: true,
-            nodeIntegration: false,
+            nodeIntegration: true,
             preload: path.join(__dirname, 'preload.js'),
         },
     })

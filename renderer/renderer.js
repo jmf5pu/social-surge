@@ -3,8 +3,17 @@ var succeededCount = 0
 var failedCount = 0
 var todoCount = 0
 var totalViewTimeMs = 0
+
+// TODO: remove this:
+const data = electronStoreGetData();
+console.log(data);
+//
+
 document.addEventListener('DOMContentLoaded', () => {
-    // form fields:
+    // form
+    const runInfoForm = document.getElementById('bot-input-form')
+
+    // form fields
     const searchStringInput = document.getElementById('search-string')
     const viewCountInput = document.getElementById('view-count')
     const minViewSInput = document.getElementById('min-view-s')
@@ -15,18 +24,30 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('file-input-label')
     const proxyInput = document.getElementById('proxy-list')
 
+    // title bar buttons
     const closeButton = document.getElementById('close-button')
     const minimizeButton = document.getElementById('minimize-button')
+
     const mainResponse = document.querySelector('#main-response')
+
+    // form controls
     const resetFormButton = document.querySelector('#form-reset-button')
     const submitFormButton = document.querySelector('#form-submit-button')
+
+    // cancel run button
     const cancelButton = document.querySelector('#cancel-button')
+
+    // 3 -> 1 button
     const pageThreeNextButton = document.querySelector(
         '#page-three-to-one'
     )
+
+    // main app pages
     const pageOne = document.getElementById('page-one')
     const pageTwo = document.getElementById('page-two')
     const pageThree = document.getElementById('page-three')
+
+    // page 2 proxy display elements
     const succeeded = document.getElementById('succeeded-count')
     const todo = document.getElementById('to-do-count')
     const failed = document.getElementById('failed-count')
@@ -35,12 +56,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.getElementById('progress-bar-inner')
     const currentProxy = document.getElementById('current-proxy')
     const totalViewTime = document.getElementById('total-view-time')
-
     const topRow = document.getElementById('top-row')
     const middleRow = document.getElementById('middle-row')
     const bottomRow = document.getElementById('bottom-row')
 
-    // Add event listeners to handle button clicks
+    // Populate the form with stored values from the store
+    for (const inputField of runInfoForm.elements) {
+        if (inputField.id) {
+            const storedValue = electronStore.get(inputField.id)
+            if (storedValue) {
+                inputField.value = storedValue
+            }
+        }
+    }
+
+    // Event listeners for title bar button clicks
     closeButton.addEventListener('click', () => {
         window.ipcRenderer.send('exit')
     })
@@ -72,6 +102,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // page 1 -> 2 (kick off run)
     submitFormButton.addEventListener('click', (event) => {
+        // Get form data and save it to localStorage
+        const formValues = new FormData(runInfoForm)
+        for (let [name, value] of formValues) {
+            electronStore.set(name, value)
+        }
+
         // remove any red borders on resubmission
         removeInputRedBorders()
 

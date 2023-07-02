@@ -17,6 +17,7 @@
     "prettier": "^2.8.8"
   },
   "dependencies": {
+    "electron-store": "^8.1.0",
     "electron-webpack": "^2.8.2",
     "postcss": "^8.4.23",
     "tailwind-scrollbar": "^3.0.4",
