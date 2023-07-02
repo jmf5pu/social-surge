@@ -121,7 +121,7 @@ textarea {
 }
 
 .duration-input {
-    @apply w-[40px] table-cell focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
+    @apply w-[40px] p-1 table-cell focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500;
 }
 
 #file-input {
@@ -248,7 +248,7 @@ textarea {
 }
 
 #cancel-button {
-    @apply focus:ring-red-300 focus:border-red-300;
+    @apply text-white focus:ring-red-300 focus:border-red-300;
 }
 #cancel-button:hover {
     @apply focus:ring-red-300 focus:border-red-300 bg-red-500;
@@ -273,16 +273,15 @@ textarea {
 
 /* page 2 proxy display stuff */
 .proxy-display-col-1 {
-    @apply flex flex-1 items-center justify-end text-right p-2;
+    @apply flex items-center justify-end text-right p-1 w-[25%];
 }
 
 .proxy-display-col-2 {
-    @apply flex flex-col items-center justify-center overflow-hidden;
-    width: 180px;
+    @apply flex flex-col items-center justify-center overflow-hidden w-[50%];
 }
 
 .proxy-display-col-3 {
-    @apply flex flex-1 items-center p-2 justify-start;
+    @apply flex items-center p-1 justify-start w-[25%];
 }
 
 /* animation stuff */
@@ -297,7 +296,7 @@ textarea {
         opacity: 0.25;
     }
     100% {
-        transform: translateY(0.9em);
+        transform: translateY(1.5em);
         opacity: 1;
     }
 }
@@ -308,7 +307,7 @@ textarea {
         opacity: 1;
     }
     100% {
-        transform: translateY(0.9em);
+        transform: translateY(1.5em);
         opacity: 0.25;
     }
 }
@@ -338,8 +337,8 @@ textarea {
 /* loading wheel stuff */
 .lds-ring {
     position: absolute;
-    top: 52px;
-    left: 327px;
+    top: 44px;
+    left: 328px;
     width: 32px;
     height: 32px;
 }
