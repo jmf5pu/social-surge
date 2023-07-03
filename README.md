@@ -1,4 +1,7 @@
 TODO: 
+* add hover popup to proxies input
+* fix dimensions on page 2
+* make buttons go transparent -> opaque on page 3
 * catch up on unit tests
 * add run timeout logic
 * add options for additional bot interaction with browser during a view (pause, clicks, refresh, etc)
