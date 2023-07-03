@@ -372,7 +372,7 @@ textarea {
 }
 
 /* 3rd page stuff */
-.page-3-pie-chart {
+#page-3-pie-chart {
     @apply rounded-md mt-[6px] mx-auto;
     background-color: red; /* For browsers that do not support gradients */
     background-image: conic-gradient(red 0%);

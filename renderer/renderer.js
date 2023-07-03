@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // listening for file selection on page 1
     chromiumPathInput.addEventListener('change', () => {
-        console.log(chromiumPathInput.files[0].path)
         chromiumPathInputLabel.innerHTML = chromiumPathInput.files[0].path
             .split('\\')
             .pop()
@@ -126,13 +125,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // page 2 -> 3 (run cancelled)
     cancelButton.addEventListener('click', () => {
         window.ipcRenderer.send('run-complete')
-        console.log('calling pageTwoToThree')
         pageTwoToThree()
     })
 
     // page 2 -> 3 (run completed)
     window.ipcRenderer.on('run-complete', () => {
-        console.log('calling pageTwoToThree')
         pageTwoToThree()
     })
 
@@ -154,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
         })
 
     window.ipcRenderer.on('individual-view-start', (event, proxy) => {
-        console.log(isWhitespace(topRow.innerHTML))
         if (isWhitespace(topRow.innerHTML)) {
             topRow.innerHTML = proxy
         } else {
@@ -230,7 +226,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // go from page 2 to 3
     function pageTwoToThree() {
-        console.log('filling pie chart')
         successRate = (
             succeededCount /
             (succeededCount + failedCount)
@@ -240,8 +235,9 @@ document.addEventListener('DOMContentLoaded', () => {
         pageThree.style.display = 'block'
         successfulViews.innerHTML = succeededCount
         totalViewTime.innerHTML = convertTime(totalViewTimeMs)
-        proxySuccessRate.innerHTML =
-            String(successRate) + '%' ? !isNaN(successRate) : '0.00%'
+        proxySuccessRate.innerHTML = !isNaN(successRate)
+            ? String(successRate) + '%'
+            : '0.00%'
     }
 
     // validate form fields
@@ -278,7 +274,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!runArgs.chromiumPath) {
-            console.log('must specify chromium path')
             chromiumPathInputLabel.classList.add('red-border')
             formIsValid = false
         }
@@ -313,25 +308,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // creates animation to fill pie chart on results page
     async function fillPieChart(greenPercentage) {
         // check for nan and convert to int
-        greenPercentage = Math.floor(greenPercentage)
-            ? !isNaN(greenPercentage)
+        greenPercentage = !isNaN(greenPercentage)
+            ? Math.ceil(greenPercentage)
             : 0
 
         // fill pie chart from zero to the target percentage
         for (i = 1; i <= greenPercentage; i++) {
-            console.log(`updating pie chart to ${i}%...`)
             pieChart.style.backgroundImage = `conic-gradient(
                 green 0%,
-                green ${greenPercentage}%,
-                red ${greenPercentage}%,
+                green ${i}%,
+                red ${i}%,
                 red 100%
             )`
-            await new Promise((resolve) => setTimeout(resolve, 500))
+            await new Promise((resolve) => setTimeout(resolve, 25))
         }
     }
 })
 
-// format time for third page TODO: fix this, total time is wrong (likely adding failed runs)
+// format time for third page
 function convertTime(totalViewTimeMs) {
     var hours = Math.floor(totalViewTimeMs / 3600000) // 1 hour = 3600000 milliseconds
     var minutes = Math.floor((totalViewTimeMs % 3600000) / 60000) // 1 minute = 60000 milliseconds
@@ -351,8 +345,10 @@ function isWhitespace(str) {
 function isNumbersAndPunctuation(str) {
     return /^[0-9\p{P}\s]+$/u.test(str)
 }
+
+// logs certain stdout message from main in the renderer terminal
 ipcRenderer.on('stdout-message', (event, message) => {
-    console.log(message) // Log the message to the renderer process console
+    console.log(message)
 })
 
 class RunInfo {

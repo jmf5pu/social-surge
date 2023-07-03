@@ -112,7 +112,8 @@ ipcMain.on('run-start', async (event, runInfo) => {
     process.env.PROXIES = runInfo.proxies
     process.env.SUCCESSES = 0
     currentProgress = 0
-    childProcess = childProcessSpawn('node', [path.join(__dirname, 'childThread.js')
+    childProcess = childProcessSpawn('node', [
+        path.join(__dirname, 'childThread.js'),
     ])
 
     const onData = async (data) => {
@@ -160,7 +161,6 @@ ipcMain.on('run-start', async (event, runInfo) => {
         sendStdoutMessage('[Child Error] ' + data.toString())
     })
 })
-
 
 function sendStdoutMessage(message) {
     console.log(message) // Log the message to the main process console
