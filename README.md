@@ -1,4 +1,5 @@
 TODO: 
+* fix total view time
 * add hover popup to proxies input
 * fix dimensions on page 2
 * make buttons go transparent -> opaque on page 3
