@@ -112,7 +112,8 @@ ipcMain.on('run-start', async (event, runInfo) => {
     process.env.PROXIES = runInfo.proxies
     process.env.SUCCESSES = 0
     currentProgress = 0
-    childProcess = childProcessSpawn('node', ['childThread.js'])
+    childProcess = childProcessSpawn('node', [path.join(__dirname, 'childThread.js')
+    ])
 
     const onData = async (data) => {
         childOutput = data.toString()
