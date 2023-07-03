@@ -7,7 +7,8 @@
     "test": "jest",
     "start": "electron .",
     "format": "npx prettier --write .",
-    "build:css": "tailwindcss build ./renderer/styles.css -o ./renderer/output.css"
+    "build:css": "tailwindcss build ./renderer/styles.css -o ./renderer/output.css",
+    "build:exe": "npx electron-packager . SocialSurge --platform=win32 --arch=x64 --out=. --overwrite"
   },
   "author": "jmf5pu",
   "license": "ISC",
