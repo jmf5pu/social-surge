@@ -3,6 +3,8 @@ var succeededCount = 0
 var failedCount = 0
 var todoCount = 0
 var totalViewTimeMs = 0
+var proxyCount = 0
+
 document.addEventListener('DOMContentLoaded', () => {
     // form fields:
     const searchStringInput = document.getElementById('search-string')
@@ -40,8 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // page 3 results
     const pieChart = document.getElementById('page-3-pie-chart')
+    const result1 = document.getElementById('result-1')
+    const result2 = document.getElementById('result-2')
+    const result3 = document.getElementById('result-3')
+    const result4 = document.getElementById('result-4')
+
     const successfulViews = document.getElementById('successful-views')
     const totalViewTime = document.getElementById('total-view-time')
+    const proxiesTried = document.getElementById('proxies-tried')
     const proxySuccessRate = document.getElementById('proxy-success-rate')
 
     // Add event listeners to handle button clicks
@@ -105,6 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
             todoCount = runArgs.viewCount
             succeededCount = 0
             failedCount = 0
+            proxyCount = Math.max(
+                runArgs.proxies.split('\n').length,
+                runArgs.proxies.split(',').length
+            )
             todo.innerHTML = todoCount
             succeeded.innerHTML = succeededCount
             failed.innerHTML = failedCount
@@ -140,6 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // reset view time
         totalViewTimeMs = 0
+
+        //reset 3rd page elements
+        setTransparent(result1)
+        setTransparent(result2)
+        setTransparent(result3)
+        setTransparent(result4)
+        pieChart.style.backgroundImage = `conic-gradient(red 0%)`
     })
 
     // exit app
@@ -227,17 +246,35 @@ document.addEventListener('DOMContentLoaded', () => {
     // go from page 2 to 3
     function pageTwoToThree() {
         successRate = (
-            succeededCount /
-            (succeededCount + failedCount)
+            (succeededCount / (succeededCount + failedCount)) *
+            100
         ).toFixed(2)
         fillPieChart(successRate)
         pageTwo.style.display = 'none'
         pageThree.style.display = 'block'
         successfulViews.innerHTML = succeededCount
         totalViewTime.innerHTML = convertTime(totalViewTimeMs)
+        proxiesTried.innerHTML =
+            succeededCount + failedCount > proxyCount
+                ? `${proxyCount} / ${proxyCount}`
+                : `${succeededCount + failedCount} / ${proxyCount}`
         proxySuccessRate.innerHTML = !isNaN(successRate)
             ? String(successRate) + '%'
             : '0.00%'
+
+        // display results to user
+        result1.classList.add('text-anim-transparent-to-opaque')
+        result1.addEventListener('animationend', () => {
+            result2.classList.add('text-anim-transparent-to-opaque')
+            result2.addEventListener('animationend', () => {
+                result3.classList.add('text-anim-transparent-to-opaque')
+                result3.addEventListener('animationend', () => {
+                    result4.classList.add(
+                        'text-anim-transparent-to-opaque'
+                    )
+                })
+            })
+        })
     }
 
     // validate form fields
@@ -344,6 +381,12 @@ function isWhitespace(str) {
 // returns if a string only contains numbers, punctuation, and whitespace
 function isNumbersAndPunctuation(str) {
     return /^[0-9\p{P}\s]+$/u.test(str)
+}
+
+// given an element, makes transparent again and removes the animation class
+function setTransparent(element) {
+    element.classList.remove('text-anim-transparent-to-opaque')
+    element.style.opacity = 0
 }
 
 // logs certain stdout message from main in the renderer terminal

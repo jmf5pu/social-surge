@@ -338,7 +338,7 @@ textarea {
 .lds-ring {
     position: absolute;
     top: 44px;
-    left: 328px;
+    left: 330px;
     width: 32px;
     height: 32px;
 }
@@ -383,6 +383,30 @@ textarea {
     @apply p-2 text-base text-center rounded-md bg-gray-800;
     /* reversing rotation in parent div */
     transform: rotate(180deg);
+}
+
+/* results-1,2,3,4 contain both the label and value elements for each results */
+#result-1,
+#result-2,
+#result-3,
+#result-4 {
+    @apply mb-[0.1rem];
+    opacity: 0;
+}
+
+.text-anim-transparent-to-opaque {
+    animation-name: transparentToOpaque;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes transparentToOpaque {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .result-label {
