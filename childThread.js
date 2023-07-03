@@ -59,6 +59,7 @@ async function main(event) {
 
         // send special message if we have hit our desired number of views
         if (successes >= viewCount) {
+            await new Promise((resolve) => setTimeout(resolve, 2000))
             console.log('all views completed')
             await pool.terminate(true)
             return

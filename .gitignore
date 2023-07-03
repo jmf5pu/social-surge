@@ -134,3 +134,6 @@ dist
 
 # generated css
 output.css
+
+# application build
+/SocialSurge-win32-x64

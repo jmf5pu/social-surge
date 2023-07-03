@@ -3,6 +3,8 @@ var succeededCount = 0
 var failedCount = 0
 var todoCount = 0
 var totalViewTimeMs = 0
+var proxyCount = 0
+
 document.addEventListener('DOMContentLoaded', () => {
     // form fields:
     const searchStringInput = document.getElementById('search-string')
@@ -21,9 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetFormButton = document.querySelector('#form-reset-button')
     const submitFormButton = document.querySelector('#form-submit-button')
     const cancelButton = document.querySelector('#cancel-button')
-    const pageThreeNextButton = document.querySelector(
-        '#page-three-to-one'
-    )
+    const pageThreeNextButton = document.querySelector('#new-run-button')
     const pageOne = document.getElementById('page-one')
     const pageTwo = document.getElementById('page-two')
     const pageThree = document.getElementById('page-three')
@@ -34,11 +34,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const incrementFailed = document.getElementById('failed-fade')
     const progressBar = document.getElementById('progress-bar-inner')
     const currentProxy = document.getElementById('current-proxy')
-    const totalViewTime = document.getElementById('total-view-time')
 
+    // proxy display
     const topRow = document.getElementById('top-row')
     const middleRow = document.getElementById('middle-row')
     const bottomRow = document.getElementById('bottom-row')
+
+    // page 3 results
+    const pieChart = document.getElementById('page-3-pie-chart')
+    const result1 = document.getElementById('result-1')
+    const result2 = document.getElementById('result-2')
+    const result3 = document.getElementById('result-3')
+    const result4 = document.getElementById('result-4')
+
+    const successfulViews = document.getElementById('successful-views')
+    const totalViewTime = document.getElementById('total-view-time')
+    const proxiesTried = document.getElementById('proxies-tried')
+    const proxySuccessRate = document.getElementById('proxy-success-rate')
 
     // Add event listeners to handle button clicks
     closeButton.addEventListener('click', () => {
@@ -51,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // listening for file selection on page 1
     chromiumPathInput.addEventListener('change', () => {
-        console.log(chromiumPathInput.files[0].path)
         chromiumPathInputLabel.innerHTML = chromiumPathInput.files[0].path
             .split('\\')
             .pop()
@@ -102,11 +113,16 @@ document.addEventListener('DOMContentLoaded', () => {
             todoCount = runArgs.viewCount
             succeededCount = 0
             failedCount = 0
+            proxyCount = Math.max(
+                runArgs.proxies.split('\n').length,
+                runArgs.proxies.split(',').length
+            )
             todo.innerHTML = todoCount
             succeeded.innerHTML = succeededCount
             failed.innerHTML = failedCount
             topRow.innerHTML = '&emsp;'
             middleRow.innerHTML = '&emsp;'
+            middleRow.style.backgroundColor = ''
             bottomRow.innerHTML = '&emsp;'
             progressBar.style.width = '0%'
             // send data to main.js
@@ -136,23 +152,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // reset view time
         totalViewTimeMs = 0
+
+        //reset 3rd page elements
+        setTransparent(result1)
+        setTransparent(result2)
+        setTransparent(result3)
+        setTransparent(result4)
+        pieChart.style.backgroundImage = `conic-gradient(red 0%)`
     })
 
     // exit app
     document
-        .getElementById('exit-btn')
+        .getElementById('exit-button')
         .addEventListener('click', (event) => {
             event.preventDefault()
             window.ipcRenderer.send('exit')
         })
 
     window.ipcRenderer.on('individual-view-start', (event, proxy) => {
-        console.log(isWhitespace(topRow.innerHTML))
         if (isWhitespace(topRow.innerHTML)) {
             topRow.innerHTML = proxy
         } else {
             let topRowTemp = topRow.innerHTML
             let middleRowTemp = middleRow.innerHTML
+
+            // clear center proxy highlighting
+            middleRow.style.backgroundColor = ''
 
             // clear bottom row
             bottomRow.innerHTML = '&emsp;'
@@ -170,6 +195,9 @@ document.addEventListener('DOMContentLoaded', () => {
             middleRow.addEventListener('animationend', () => {
                 middleRow.classList.remove('animated-text-darken')
                 bottomRow.innerHTML = middleRowTemp
+
+                //now that the animations are complete, add back highlight
+                middleRow.style.backgroundColor = '#000000'
             })
         }
     })
@@ -217,9 +245,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // go from page 2 to 3
     function pageTwoToThree() {
+        successRate = (
+            (succeededCount / (succeededCount + failedCount)) *
+            100
+        ).toFixed(2)
+        fillPieChart(successRate)
         pageTwo.style.display = 'none'
         pageThree.style.display = 'block'
+        successfulViews.innerHTML = succeededCount
         totalViewTime.innerHTML = convertTime(totalViewTimeMs)
+        proxiesTried.innerHTML =
+            succeededCount + failedCount > proxyCount
+                ? `${proxyCount} / ${proxyCount}`
+                : `${succeededCount + failedCount} / ${proxyCount}`
+        proxySuccessRate.innerHTML = !isNaN(successRate)
+            ? String(successRate) + '%'
+            : '0.00%'
+
+        // display results to user
+        result1.classList.add('text-anim-transparent-to-opaque')
+        result1.addEventListener('animationend', () => {
+            result2.classList.add('text-anim-transparent-to-opaque')
+            result2.addEventListener('animationend', () => {
+                result3.classList.add('text-anim-transparent-to-opaque')
+                result3.addEventListener('animationend', () => {
+                    result4.classList.add(
+                        'text-anim-transparent-to-opaque'
+                    )
+                })
+            })
+        })
     }
 
     // validate form fields
@@ -256,7 +311,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (!runArgs.chromiumPath) {
-            console.log('must specify chromium path')
             chromiumPathInputLabel.classList.add('red-border')
             formIsValid = false
         }
@@ -287,9 +341,28 @@ document.addEventListener('DOMContentLoaded', () => {
     function submitForm(formData) {
         window.ipcRenderer.send('run-start', formData)
     }
+
+    // creates animation to fill pie chart on results page
+    async function fillPieChart(greenPercentage) {
+        // check for nan and convert to int
+        greenPercentage = !isNaN(greenPercentage)
+            ? Math.ceil(greenPercentage)
+            : 0
+
+        // fill pie chart from zero to the target percentage
+        for (i = 1; i <= greenPercentage; i++) {
+            pieChart.style.backgroundImage = `conic-gradient(
+                green 0%,
+                green ${i}%,
+                red ${i}%,
+                red 100%
+            )`
+            await new Promise((resolve) => setTimeout(resolve, 25))
+        }
+    }
 })
 
-// format time for third page TODO: fix this, total time is wrong (likely adding failed runs)
+// format time for third page
 function convertTime(totalViewTimeMs) {
     var hours = Math.floor(totalViewTimeMs / 3600000) // 1 hour = 3600000 milliseconds
     var minutes = Math.floor((totalViewTimeMs % 3600000) / 60000) // 1 minute = 60000 milliseconds
@@ -309,6 +382,18 @@ function isWhitespace(str) {
 function isNumbersAndPunctuation(str) {
     return /^[0-9\p{P}\s]+$/u.test(str)
 }
+
+// given an element, makes transparent again and removes the animation class
+function setTransparent(element) {
+    element.classList.remove('text-anim-transparent-to-opaque')
+    element.style.opacity = 0
+}
+
+// logs certain stdout message from main in the renderer terminal
+ipcRenderer.on('stdout-message', (event, message) => {
+    console.log(message)
+})
+
 class RunInfo {
     constructor(
         searchString,
