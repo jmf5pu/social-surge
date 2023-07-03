@@ -99,7 +99,7 @@ function cleanupRun() {
     process.env.SUCCESSES = 0
 }
 
-// stat run and setup stdout listeners for child_process thread
+// start run and setup stdout listeners for child_process thread
 ipcMain.on('run-start', async (event, runInfo) => {
     console.log(`recieved: ${runInfo.chromiumPath}`)
     process.env.SEARCHSTRING = String(runInfo.searchString)
@@ -116,7 +116,7 @@ ipcMain.on('run-start', async (event, runInfo) => {
 
     const onData = async (data) => {
         childOutput = data.toString()
-        console.log('[Child] ', childOutput)
+        sendStdoutMessage('[Child] ' + childOutput)
 
         // Check if we have hit our desired number of views
         if (childOutput.includes('all views completed')) {
@@ -156,6 +156,12 @@ ipcMain.on('run-start', async (event, runInfo) => {
 
     // Listen for data on stderr (errors)
     childProcess.stderr.on('data', (data) => {
-        console.error(`[Child Error] ${data}`)
+        sendStdoutMessage('[Child Error] ' + data.toString())
     })
 })
+
+
+function sendStdoutMessage(message) {
+    console.log(message) // Log the message to the main process console
+    mainWindow.webContents.send('stdout-message', message) // Send the message to the renderer process
+}

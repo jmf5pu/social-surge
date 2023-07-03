@@ -351,6 +351,10 @@ function isWhitespace(str) {
 function isNumbersAndPunctuation(str) {
     return /^[0-9\p{P}\s]+$/u.test(str)
 }
+ipcRenderer.on('stdout-message', (event, message) => {
+    console.log(message) // Log the message to the renderer process console
+})
+
 class RunInfo {
     constructor(
         searchString,
