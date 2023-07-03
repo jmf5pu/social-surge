@@ -296,7 +296,7 @@ textarea {
         opacity: 0.25;
     }
     100% {
-        transform: translateY(1.5em);
+        transform: translateY(1.7em);
         opacity: 1;
     }
 }
@@ -307,7 +307,7 @@ textarea {
         opacity: 1;
     }
     100% {
-        transform: translateY(1.5em);
+        transform: translateY(1.7em);
         opacity: 0.25;
     }
 }
@@ -319,7 +319,7 @@ textarea {
 
 /* middle row */
 .light-ip-address {
-    opacity: 1;
+    @apply p-1 rounded-md;
 }
 
 .animated-text-lighten {
@@ -375,12 +375,7 @@ textarea {
 .page-3-pie-chart {
     @apply rounded-md mt-[6px] mx-auto;
     background-color: red; /* For browsers that do not support gradients */
-    background-image: conic-gradient(
-        green 0%,
-        green 15%,
-        red 15%,
-        red 100%
-    );
+    background-image: conic-gradient(red 0%);
     transform: rotate(180deg);
 }
 
@@ -391,7 +386,7 @@ textarea {
 }
 
 .result-label {
-    @apply font-bold mb-1;
+    @apply mb-1;
 }
 
 .page-3-result {

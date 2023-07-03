@@ -1,6 +1,6 @@
 const { app, BrowserWindow, Menu, ipcMain } = require('electron')
 const path = require('path')
-const isDev = false
+const isDev = true
 //const isMac = process.platform === 'darwin'
 const dimensions = [370, 370] // width, height
 const childProcessSpawn = require('child_process').spawn
@@ -114,7 +114,7 @@ ipcMain.on('run-start', async (event, runInfo) => {
     currentProgress = 0
     childProcess = childProcessSpawn('node', ['childThread.js'])
 
-    const onData = (data) => {
+    const onData = async (data) => {
         childOutput = data.toString()
         console.log('[Child] ', childOutput)
 

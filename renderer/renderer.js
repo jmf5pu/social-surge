@@ -32,11 +32,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const incrementFailed = document.getElementById('failed-fade')
     const progressBar = document.getElementById('progress-bar-inner')
     const currentProxy = document.getElementById('current-proxy')
-    const totalViewTime = document.getElementById('total-view-time')
 
+    // proxy display
     const topRow = document.getElementById('top-row')
     const middleRow = document.getElementById('middle-row')
     const bottomRow = document.getElementById('bottom-row')
+
+    // page 3 results
+    const pieChart = document.getElementById('page-3-pie-chart')
+    const successfulViews = document.getElementById('successful-views')
+    const totalViewTime = document.getElementById('total-view-time')
+    const proxySuccessRate = document.getElementById('proxy-success-rate')
 
     // Add event listeners to handle button clicks
     closeButton.addEventListener('click', () => {
@@ -105,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
             failed.innerHTML = failedCount
             topRow.innerHTML = '&emsp;'
             middleRow.innerHTML = '&emsp;'
+            middleRow.style.backgroundColor = ''
             bottomRow.innerHTML = '&emsp;'
             progressBar.style.width = '0%'
             // send data to main.js
@@ -119,11 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // page 2 -> 3 (run cancelled)
     cancelButton.addEventListener('click', () => {
         window.ipcRenderer.send('run-complete')
+        console.log('calling pageTwoToThree')
         pageTwoToThree()
     })
 
     // page 2 -> 3 (run completed)
     window.ipcRenderer.on('run-complete', () => {
+        console.log('calling pageTwoToThree')
         pageTwoToThree()
     })
 
@@ -152,6 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
             let topRowTemp = topRow.innerHTML
             let middleRowTemp = middleRow.innerHTML
 
+            // clear center proxy highlighting
+            middleRow.style.backgroundColor = ''
+
             // clear bottom row
             bottomRow.innerHTML = '&emsp;'
 
@@ -168,6 +180,9 @@ document.addEventListener('DOMContentLoaded', () => {
             middleRow.addEventListener('animationend', () => {
                 middleRow.classList.remove('animated-text-darken')
                 bottomRow.innerHTML = middleRowTemp
+
+                //now that the animations are complete, add back highlight
+                middleRow.style.backgroundColor = '#000000'
             })
         }
     })
@@ -215,9 +230,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // go from page 2 to 3
     function pageTwoToThree() {
+        console.log('filling pie chart')
+        successRate = (
+            succeededCount /
+            (succeededCount + failedCount)
+        ).toFixed(2)
+        fillPieChart(successRate)
         pageTwo.style.display = 'none'
         pageThree.style.display = 'block'
+        successfulViews.innerHTML = succeededCount
         totalViewTime.innerHTML = convertTime(totalViewTimeMs)
+        proxySuccessRate.innerHTML =
+            String(successRate) + '%' ? !isNaN(successRate) : '0.00%'
     }
 
     // validate form fields
@@ -284,6 +308,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // form submission
     function submitForm(formData) {
         window.ipcRenderer.send('run-start', formData)
+    }
+
+    // creates animation to fill pie chart on results page
+    async function fillPieChart(greenPercentage) {
+        // check for nan and convert to int
+        greenPercentage = Math.floor(greenPercentage)
+            ? !isNaN(greenPercentage)
+            : 0
+
+        // fill pie chart from zero to the target percentage
+        for (i = 1; i <= greenPercentage; i++) {
+            console.log(`updating pie chart to ${i}%...`)
+            pieChart.style.backgroundImage = `conic-gradient(
+                green 0%,
+                green ${greenPercentage}%,
+                red ${greenPercentage}%,
+                red 100%
+            )`
+            await new Promise((resolve) => setTimeout(resolve, 500))
+        }
     }
 })
 
