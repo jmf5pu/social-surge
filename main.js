@@ -12,6 +12,7 @@ var mainWindow
 function createMainWindow() {
     mainWindow = new BrowserWindow({
         title: 'Social Surge',
+        icon: path.join(__dirname, './icon.png'),
         width: isDev ? dimensions[0] + 500 : dimensions[0], // extend window for dev console
         height: dimensions[1],
         frame: false,
@@ -19,7 +20,7 @@ function createMainWindow() {
         webPreferences: {
             contextIsolation: true,
             nodeIntegration: false,
-            preload: path.join(__dirname, 'preload.js'),
+            preload: path.join(__dirname, './preload.js'),
         },
     })
 

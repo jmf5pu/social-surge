@@ -232,7 +232,7 @@ textarea {
 }
 
 .flex-container-proxy-display {
-    @apply flex h-24;
+    @apply flex h-24 mt-1;
 }
 
 .left-result-column {
@@ -263,8 +263,8 @@ textarea {
 }
 
 #progress-bar-outer {
-    @apply w-full bg-gray-900 rounded-full mb-2;
-    height: 20px;
+    @apply w-full bg-gray-900 rounded-full mb-1 mt-1;
+    height: 25px;
 }
 
 #progress-bar-inner {
