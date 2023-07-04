@@ -46,6 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const result2 = document.getElementById('result-2')
     const result3 = document.getElementById('result-3')
     const result4 = document.getElementById('result-4')
+    const pageThreeButtons = document.getElementById('page-3-buttons')
 
     const successfulViews = document.getElementById('successful-views')
     const totalViewTime = document.getElementById('total-view-time')
@@ -81,6 +82,14 @@ document.addEventListener('DOMContentLoaded', () => {
         removeInputRedBorders()
     })
 
+    // open chromium link in user's default browser
+    document
+        .getElementById('chromium-link')
+        .addEventListener('click', (event) => {
+            event.preventDefault()
+            window.ipcRenderer.send('open-chromium-link')
+        })
+
     // page 1 -> 2 (kick off run)
     submitFormButton.addEventListener('click', (event) => {
         // remove any red borders on resubmission
@@ -99,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     return null
                 }
             })()),
-            (proxies = proxyInput.value)
+            (proxies = proxyInput.value.trim())
         )
 
         // workerCount must be 1 or greater, if not, reset to default
@@ -158,6 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTransparent(result2)
         setTransparent(result3)
         setTransparent(result4)
+        setTransparent(pageThreeButtons)
         pieChart.style.backgroundImage = `conic-gradient(red 0%)`
     })
 
@@ -263,15 +273,18 @@ document.addEventListener('DOMContentLoaded', () => {
             : '0.00%'
 
         // display results to user
-        result1.classList.add('text-anim-transparent-to-opaque')
+        result1.classList.add('anim-transparent-to-opaque')
         result1.addEventListener('animationend', () => {
-            result2.classList.add('text-anim-transparent-to-opaque')
+            result2.classList.add('anim-transparent-to-opaque')
             result2.addEventListener('animationend', () => {
-                result3.classList.add('text-anim-transparent-to-opaque')
+                result3.classList.add('anim-transparent-to-opaque')
                 result3.addEventListener('animationend', () => {
-                    result4.classList.add(
-                        'text-anim-transparent-to-opaque'
-                    )
+                    result4.classList.add('anim-transparent-to-opaque')
+                    result4.addEventListener('animationend', () => {
+                        pageThreeButtons.classList.add(
+                            'anim-transparent-to-opaque'
+                        )
+                    })
                 })
             })
         })
@@ -385,7 +398,7 @@ function isNumbersAndPunctuation(str) {
 
 // given an element, makes transparent again and removes the animation class
 function setTransparent(element) {
-    element.classList.remove('text-anim-transparent-to-opaque')
+    element.classList.remove('anim-transparent-to-opaque')
     element.style.opacity = 0
 }
 

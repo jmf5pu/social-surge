@@ -38,9 +38,9 @@
                                 >
                                 <input type="text" id="search-string" />
                                 <div id="search-string-info">
-                                    Enter the phrase that returns the
-                                    target video as the first result on
-                                    youtube search
+                                    Enter a phrase that returns the target
+                                    video as the first result on youtube
+                                    search
                                 </div>
                             </div>
                             <div class="form-inline-div">
@@ -95,8 +95,16 @@
                                     <label
                                         for="file-input"
                                         id="file-input-label"
-                                        >Select chrome.exe</label
+                                        >Chromium path</label
                                     >
+                                    <div id="file-input-info">
+                                        Select the location of
+                                        <b>chrome.exe</b>
+                                        on your PC.
+                                        <span id="chromium-link">
+                                            [download chromium here]
+                                        </span>
+                                    </div>
                                     <input id="file-input" type="file" />
                                 </div>
                             </div>
@@ -257,7 +265,7 @@
                                     class="page-3-result"
                                 ></span>
                             </div>
-                            <div class="page-3-buttons">
+                            <div id="page-3-buttons">
                                 <input
                                     type="button"
                                     value="Exit &#x1F645;"

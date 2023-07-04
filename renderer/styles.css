@@ -138,19 +138,23 @@ textarea {
 /* help info on hover */
 
 #search-string-info {
-    @apply hidden absolute bg-gray-900 text-white text-sm p-2 rounded-md w-[200px] mt-[2px] z-10;
+    @apply hidden absolute bg-gray-900 text-white text-sm p-2 rounded-md w-[340px] mt-[2px] z-10;
 }
 
 #view-count-info {
-    @apply hidden absolute bg-gray-900 text-white text-sm p-2 rounded-md w-[130px] mt-[2px] z-10;
+    @apply hidden absolute bg-gray-900 text-white text-sm p-2 rounded-md w-[145px] mt-[2px] z-10;
 }
 
 #duration-info {
-    @apply hidden absolute bg-gray-900 text-white text-sm p-2 rounded-md w-[130px] mt-[2px] z-10;
+    @apply hidden absolute bg-gray-900 text-white text-sm p-2 rounded-md w-[105px] mt-[2px] z-10;
 }
 
 #worker-count-info {
-    @apply hidden absolute bg-gray-900 text-white text-sm p-2 rounded-md w-[200px] mt-[2px] z-10;
+    @apply hidden absolute bg-gray-900 text-white text-sm p-2 rounded-md w-[190px] mt-[2px] z-10;
+}
+
+#file-input-info {
+    @apply hidden absolute bg-gray-900 text-white text-sm p-2 rounded-md w-[185px] mt-[2px] z-10;
 }
 
 .proxy-input-parent {
@@ -160,31 +164,51 @@ textarea {
     @apply absolute z-10 mt-[2px] hidden w-[275px] rounded-md bg-gray-900 p-2 text-sm text-white;
 }
 
-#search-string:hover + #search-string-info {
+#search-string:hover:focus + #search-string-info {
     @apply block;
+    transform: translateX(-0.5%);
 }
 
-#view-count:hover + #view-count-info {
+#view-count:hover:focus + #view-count-info {
     @apply block;
     top: 100%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-0.5%);
 }
 
-#min-view-s:hover ~ #duration-info {
+#min-view-s:hover:focus ~ #duration-info {
     @apply block;
     top: 100%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-14.5%);
 }
 
-#worker-count:hover ~ #worker-count-info {
+#max-view-s:hover:focus ~ #duration-info {
     @apply block;
     top: 100%;
     left: 50%;
-    transform: translateX(-30%);
+    transform: translateX(-14.5%);
 }
-#proxy-list:hover + #proxy-info {
+
+#worker-count:hover:focus ~ #worker-count-info {
+    @apply block;
+    top: 100%;
+    left: 50%;
+    transform: translateX(4.5%);
+}
+
+#file-input-label:hover ~ #file-input-info,
+#file-input-info:hover {
+    @apply block;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-6%) translateY(-211%);
+}
+
+#chromium-link:hover {
+    @apply cursor-pointer underline bg-blue-700 rounded-md;
+}
+#proxy-list:hover:focus + #proxy-info {
     @apply block;
     top: 100%;
     left: 50%;
@@ -394,7 +418,7 @@ textarea {
     opacity: 0;
 }
 
-.text-anim-transparent-to-opaque {
+.anim-transparent-to-opaque {
     animation-name: transparentToOpaque;
     animation-duration: 1s;
     animation-fill-mode: forwards;
@@ -417,8 +441,9 @@ textarea {
     @apply p-1 bg-black rounded-md;
 }
 
-.page-3-buttons {
+#page-3-buttons {
     @apply mt-2;
+    opacity: 0;
 }
 
 #exit-button {

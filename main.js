@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcMain } = require('electron')
+const { app, BrowserWindow, Menu, ipcMain, shell } = require('electron')
 const path = require('path')
 const isDev = false
 //const isMac = process.platform === 'darwin'
@@ -68,6 +68,14 @@ app.on('window-all-closed', () => {
     }
 })
 
+// opens chromium link in user's default browser
+ipcMain.on('open-chromium-link', () => {
+    shell.openExternal(
+        'https://www.chromium.org/getting-involved/download-chromium/'
+    )
+})
+
+// cancel run button was clicked
 ipcMain.on('run-complete', async (event) => {
     cleanupRun()
 })
